@@ -36,8 +36,8 @@
 }
 
 .footer {
-  background-color: #f5f5f5;
-  border-top: 2px solid #f1f1f1;
+  /* border-top: 2px solid #f1f1f1; */
+  background-color: #fff;
   position: fixed;
   bottom: 0;
   width: 100vw;

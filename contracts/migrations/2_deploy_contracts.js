@@ -1,5 +1,5 @@
-// const Contacts = artifacts.require("./Contacts.sol");
+const DapTube = artifacts.require("DapTube");
 
-// module.exports = function (deployer) {
-//     deployer.deploy(Contacts);
-// };
+module.exports = function (deployer) {
+    deployer.deploy(DapTube);
+};
