@@ -7,12 +7,26 @@
 } */
 
 .container {
-  display: flex;
+  padding: 30px;
+  /* display: flex;
   align-items: center;
   justify-content: center;
   flex-direction: column;
   height: 100vh;
-  background: linear-gradient(45deg, #2196f3, #02aefb0d,#e91e63);
+  background: linear-gradient(45deg, #2196f3, #02aefb0d,#e91e63); */
+}
+
+.flex {
+  display: flex;
+  align-items: center;
+  
+}
+
+.text-input {
+  padding: 10px;
+  border: 2px solid #000;
+  border-radius: 10px;
+  font-size: 1rem;
 }
 
 .text-lg{

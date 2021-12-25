@@ -1,10 +1,13 @@
 import React, { useEffect, useState } from 'react'
 import Web3 from 'web3'
 import './App.css'
-import { CONTRACT_ABI, CONTRACT_ADDRESS } from './abis/DapTube'
+import { CONTRACT_ABI } from './abis/dapTube.abi'
 
 function App() {
   const [account, setAccount] = useState();
+  const [dapTube, setDapTube] = useState();
+  const [videos, setVideos] = useState([]);
+  const [videoCount, setVideoCount] = useState(0);
 
   useEffect(() => {
     async function initApp() {
@@ -24,47 +27,55 @@ function App() {
     }
 
     else if (window.web3) window.web3 = new Web3(window.web3.currentProvider)
-    else window.alert("Your browser doesn't support ethereum")
+    else window.alert("Your browser doesn't support ethereum! 😔")
   }
 
   const loadBlockchainData = async () => {
+
     const web3 = window.web3
     const accounts = await web3.eth.getAccounts()
-
-    setAccount(accounts[0])
-
-    if (await isNetworkConnected(web3)) {
-      const dapTube = await new web3.eth.Contract(CONTRACT_ABI.abi, CONTRACT_ABI.networks[5777].address)
-      console.log(dapTube.methods)
-    }
-
-
-
-
-    // const c = await new web3.eth.Contract(CONTRACT_ABI.abi, CONTRACT_ABI.networks[networkId].address)
-
-    // c.methods.addVideo('d', 'd').send({ from: account })
-  }
-
-  const isNetworkConnected = async (web3) => {
     const networkId = await web3.eth.net.getId()
     const networkInfo = CONTRACT_ABI.networks[networkId]
 
-    if (networkInfo) return true
+    if (networkInfo) {
 
-    else {
-      alert(`contract no deployed! ${networkInfo}`)
-      return false;
+      console.log('successfully connected to network! 🎉')
+
+      const dapTubeData = await new web3.eth.Contract(CONTRACT_ABI.abi, networkInfo.address)
+      const dapTubeVideoCount = await dapTubeData.methods.videoCount().call()
+
+      setAccount(accounts[0])
+      setDapTube(dapTubeData)
+      setVideoCount(dapTubeVideoCount)
+
+      for (let i = dapTubeVideoCount; i >= 1; i--) {
+
+        const currentVideo = await dapTubeData.methods.videos(i).call()
+        console.log('videosList:', currentVideo)
+
+        setVideos([...videos, currentVideo])
+      }
     }
+
+    else alert(`contract no deployed! 😔`)
+
+    // const c = await new web3.eth.Contract(CONTRACT_ABI.abi, CONTRACT_ABI.networks[networkId].address)
+    // c.methods.addVideo('d', 'd').send({ from: account })
   }
 
   return (
     <div className='container'>
       <h1 className='text-lg'>Welcome to DappTube</h1>
-      <a href='#' className='btn'>Connect wallet</a>
-      <br />
-      <br />
-      <p>My account: <b>{account}</b></p>
+
+      <p>{account}</p>
+      <h1>Upload a video</h1>
+
+      <div><input type='file' /></div>
+
+      <div className='flex'>
+        <input type='text' placeholder='Enter video title...' className='text-input' /> <br /> <br />
+        <div><a href='#' className='btn'>Connect wallet</a></div>
+      </div>
 
       <div className='footer'>&copy;2021-2022 DappTube tech</div>
     </div>
