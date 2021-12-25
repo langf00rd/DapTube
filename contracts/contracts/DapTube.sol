@@ -1,6 +1,8 @@
 pragma solidity ^0.5.0;
 
 contract DapTube {
+
+    // variables
     uint public videosCount = 0;
     string public name = 'DapTube';
     mapping(uint => Video) public videos;
@@ -10,15 +12,17 @@ contract DapTube {
         uint id;
         string src;
         string title;
-        address owner
+        address owner;
     }
 
     // run on smart contruct deplyed
-    construction() public {}
+    // construction () public {}
 
     // save video blockchain
-    function addVideo(,string memory _src, string memory _title) public {
+    function addVideo(string memory _src, string memory _title) public {
         videosCount++;
+
+        // save video to contract
         videos[videosCount] = Video(videosCount, _src, _title, msg.sender);
     }
 }

@@ -1,4 +1,5 @@
-{
+export const CONTRACT_ADDRESS = '0x7c238B9ac51fCE01FCDa6ffcCf603b56e70fA226'
+export const CONTRACT_ABI = {
   "contractName": "DapTube",
   "abi": [
     {

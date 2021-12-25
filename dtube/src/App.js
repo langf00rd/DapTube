@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import Web3 from 'web3'
 import './App.css'
-import { CONTRACT_ABI, CONTRACT_ADDRESS } from './config'
+import { CONTRACT_ABI, CONTRACT_ADDRESS } from './abis/DapTube'
 
 function App() {
   const [account, setAccount] = useState();
@@ -24,7 +24,7 @@ function App() {
     }
 
     else if (window.web3) window.web3 = new Web3(window.web3.currentProvider)
-    else window.alert("Your browser doesn't support ethereum");
+    else window.alert("Your browser doesn't support ethereum")
   }
 
   const loadBlockchainData = async () => {
@@ -33,21 +33,29 @@ function App() {
 
     setAccount(accounts[0])
 
-    const networkId = await web3.eth.net.getId()
-    const networkData = CONTRACT_ABI.networks[networkId]
-    // const networkData = CONTRACT_ABI.networks[5777].address
-
-    if (networkData) {
+    if (await isNetworkConnected(web3)) {
       const dapTube = await new web3.eth.Contract(CONTRACT_ABI.abi, CONTRACT_ABI.networks[5777].address)
-      console.log(dapTube.methods, networkId, CONTRACT_ABI.networks[5777].address)
+      console.log(dapTube.methods)
     }
 
-    else alert(`contract no deployed! ${networkData}`)
+
 
 
     // const c = await new web3.eth.Contract(CONTRACT_ABI.abi, CONTRACT_ABI.networks[networkId].address)
 
     // c.methods.addVideo('d', 'd').send({ from: account })
+  }
+
+  const isNetworkConnected = async (web3) => {
+    const networkId = await web3.eth.net.getId()
+    const networkInfo = CONTRACT_ABI.networks[networkId]
+
+    if (networkInfo) return true
+
+    else {
+      alert(`contract no deployed! ${networkInfo}`)
+      return false;
+    }
   }
 
   return (
