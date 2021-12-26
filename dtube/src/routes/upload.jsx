@@ -1,20 +1,34 @@
 import React, { useState, useEffect } from "react"
+import { GET_BLOCKCHAIN_DATA, GENERATE_BUFFER_FROM_FILE, IPFS } from "../constants/constants"
 
 export default function Upload() {
+
+    const [dapTubeData, setDapTubeData] = useState()
     const [title, setTitle] = useState()
     const [description, setDescription] = useState()
     const [file, setFile] = useState()
-    const [address, setAddress] = useState(localStorage.getItem('address'))
+    const [address, setAddress] = useState(sessionStorage.getItem('address'))
     const videoTypes = [
         'video/mp4',
         'video/mkv',
     ]
 
     useEffect(() => {
-        if (!address) {
-            alert('Please login')
-            window.history.back()
+
+        const initUploadPage = async () => {
+            if (!address) {
+                alert('Please login')
+                window.history.back()
+            }
+
+            const [isConnected, payload] = await GET_BLOCKCHAIN_DATA()
+
+            if (!isConnected) alert('could not connect to web3 😔')
+
+            setDapTubeData(payload)
         }
+
+        initUploadPage()
 
         return () => { }
     }, [])
@@ -23,28 +37,26 @@ export default function Upload() {
         window.history.back()
     }
 
-    const convertFileToBuffer = (rawFile) => {
-        let reader = new FileReader()
+    const startUpload = async () => {
+        let newFileUrl = ''
 
-        reader.onload = () => {
-            let buffer = new Uint8Array(reader.result)
-            console.log(buffer)
-            setFile(buffer)
-        }
-
-        reader.readAsArrayBuffer(rawFile)
-    }
-
-    const startUpload = () => {
         if (!file) {
             alert('choose a file')
             return
         }
 
-        console.log('title', title)
-        console.log('description', description)
-        console.log('address', address)
-        console.log('file', file)
+        try {
+            console.log(dapTubeData)
+
+            // const uploadedFile = await IPFS.add(file)
+            // newFileUrl = uploadedFile.path
+
+        } catch (error) {
+            alert('upload not complete')
+            console.log(error)
+        }
+
+        console.log('done!')
 
         //check file type before upload
     }
@@ -85,16 +97,16 @@ export default function Upload() {
                 <div className="color-container">
                     <div className='input-wrapper'>
                         <div><b>Choose video</b></div><br />
-                        <input type='file' className='file-selector' onChange={(e) => { convertFileToBuffer(e.target.files[0]) }} accept='video/*' />
+                        <input type='file' className='file-selector' onChange={(e) => setFile(GENERATE_BUFFER_FROM_FILE(e.target.files[0]))} />
+                        {/* <input type='file' className='file-selector' onChange={(e) => { convertFileToBuffer(e.target.files[0]) }} accept='video/*' /> */}
                     </div>
-                    <div className="space-60"></div>
+                    {/* <div className="space-60"></div>
                     <div className='input-wrapper'>
                         <div><b>Select a thumbnail</b></div><br />
-                        <input type='file' accept="image/*" className='file-selector' onChange={(e) => { convertFileToBuffer(e.target.files[0]) }} />
-                    </div>
+                        <input type='file' accept="image/*" className='file-selector' onChange={(e) => { setFile(GENERATE_BUFFER_FROM_FILE(e.target.files[0])) }} />
+                    </div> */}
                 </div>
             </div>
-
         </div>
     );
 }
