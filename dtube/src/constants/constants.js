@@ -51,18 +51,20 @@ const GET_BLOCKCHAIN_DATA = async () => {
     }
 }
 
-const GENERATE_BUFFER_FROM_FILE = async (rawFile) => {
-    try {
-        let reader = new FileReader()
+const GENERATE_BUFFER_FROM_FILE = async (file) => {
 
-        reader.onload = () => {
-            let buffer = new Uint8Array(reader.result)
-            return buffer
+    try {
+
+        const reader = new FileReader()
+        reader.readAsArrayBuffer(file)
+
+        reader.onloadend = async () => {
+            console.log(Buffer(reader.result))
+            return Buffer(reader.result)
         }
 
-        reader.readAsArrayBuffer(rawFile)
-
     } catch (error) {
+        console.log(error)
         return null;
     }
 }

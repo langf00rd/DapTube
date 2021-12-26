@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from "react"
-import { GET_BLOCKCHAIN_DATA, GENERATE_BUFFER_FROM_FILE, IPFS } from "../constants/constants"
+import React, { useState, useEffect } from "react";
+import { GET_BLOCKCHAIN_DATA, GENERATE_BUFFER_FROM_FILE, IPFS } from '../constants/constants';
 
 export default function Upload() {
 
@@ -37,24 +37,31 @@ export default function Upload() {
         window.history.back()
     }
 
-    const startUpload = async () => {
-        let newFileUrl = ''
+    const convertFileToBuffer = async (e) => {
+
+        const _file = e.target.files[0]
+        const reader = new FileReader()
+        reader.readAsArrayBuffer(_file)
+
+        reader.onloadend = async () => {
+            console.log(Buffer(reader.result))
+            setFile(Buffer(reader.result))
+        }
+    }
+
+    const saveToBlockchain = (fileHash) => {
+        console.log(`https://ipfs.infura.io/ipfs/${fileHash}`)
+    }
+
+    const uploadToIpfs = async (e) => {
 
         if (!file) {
             alert('choose a file')
             return
         }
 
-        try {
-            console.log(dapTubeData)
-
-            // const uploadedFile = await IPFS.add(file)
-            // newFileUrl = uploadedFile.path
-
-        } catch (error) {
-            alert('upload not complete')
-            console.log(error)
-        }
+        const uploadedFile = await IPFS.add(file)
+        saveToBlockchain(uploadedFile.path)
 
         console.log('done!')
 
@@ -69,7 +76,7 @@ export default function Upload() {
             </div>
             <div className="flex-between">
                 <h1>Upload your video</h1>
-                <div className="btn-filled" onClick={startUpload}>Start upload</div>
+                <div className="btn-filled" onClick={uploadToIpfs}>Start upload</div>
             </div>
             <div className="space-20"></div>
 
@@ -97,8 +104,7 @@ export default function Upload() {
                 <div className="color-container">
                     <div className='input-wrapper'>
                         <div><b>Choose video</b></div><br />
-                        <input type='file' className='file-selector' onChange={(e) => setFile(GENERATE_BUFFER_FROM_FILE(e.target.files[0]))} />
-                        {/* <input type='file' className='file-selector' onChange={(e) => { convertFileToBuffer(e.target.files[0]) }} accept='video/*' /> */}
+                        <input type='file' className='file-selector' onChange={async (e) => convertFileToBuffer(e)} accept='video/*' />
                     </div>
                     {/* <div className="space-60"></div>
                     <div className='input-wrapper'>
