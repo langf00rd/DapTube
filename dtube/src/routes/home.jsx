@@ -4,21 +4,18 @@ import { GET_BLOCKCHAIN_DATA, GET_ACCOUNTS } from "../constants/constants"
 
 export default function Home() {
     let navigate = useNavigate();
-
     const [account, setAccount] = useState(sessionStorage.getItem('address'));
     const [dapTube, setDapTube] = useState();
     const [videos, setVideos] = useState([]);
     const [videoCount, setVideoCount] = useState(0);
 
     useEffect(() => {
-
         if (!account) {
             navigate('/')
             return
         }
 
         loadVideos()
-
         return () => { }
     }, [])
 
@@ -28,6 +25,7 @@ export default function Home() {
         if (!isConnected) return
 
         const dapTubeVideoCount = await payload.methods.videoCount().call()
+        const videosArray = []
 
         setDapTube(payload)
         setAccount(await GET_ACCOUNTS())
@@ -35,8 +33,10 @@ export default function Home() {
 
         for (let i = dapTubeVideoCount; i >= 1; i--) {
             const video = await payload.methods.videos(i).call()
-            setVideos([...videos, video])
+            videosArray.push(video)
         }
+
+        setVideos(videosArray)
     }
 
     return (
@@ -55,13 +55,30 @@ export default function Home() {
             </header>
 
             <div className="poster-container">
-                <div className="poster-item">
+                {
+                    videos.map(function (video, index) {
+                        // return (<p key={index}>{video[1]}</p>);
+                        {/* <img className='poster-img' src="https://cfvod.kaltura.com/p/1926081/sp/192608100/thumbnail/entry_id/1_48193rbm/version/100001/width/372/height/209" alt="" /> */ }
+
+                        return <div key={index} className="poster-item">
+                            <video className='poster-img' src={video[1]}></video>
+                            <div className="poster-text">
+                                <div><small className='poster-title'>{video[2]}</small></div>
+                                <div><small className='post-time'>12:03</small></div>
+                            </div>
+                        </div>
+
+                    })
+                }
+
+                {/* <div className="poster-item">
                     <img className='poster-img' src="https://cfvod.kaltura.com/p/1926081/sp/192608100/thumbnail/entry_id/1_48193rbm/version/100001/width/372/height/209" alt="" />
                     <div className="poster-text">
                         <div><small className='poster-title'>The Avengers - Age Of Ultron is nearly over</small></div>
                         <div><small className='post-time'>12:03</small></div>
                     </div>
-                </div>
+                </div> */}
+
             </div>
         </main>
     );

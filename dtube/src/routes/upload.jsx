@@ -14,7 +14,6 @@ export default function Upload() {
     ]
 
     useEffect(() => {
-
         const initUploadPage = async () => {
             if (!address) {
                 alert('Please login')
@@ -22,20 +21,15 @@ export default function Upload() {
             }
 
             const [isConnected, payload] = await GET_BLOCKCHAIN_DATA()
-
             if (!isConnected) alert('could not connect to web3 😔')
-
             setDapTubeData(payload)
         }
 
         initUploadPage()
-
         return () => { }
     }, [])
 
-    const goBack = () => {
-        window.history.back()
-    }
+    const goBack = () => window.history.back()
 
     const convertFileToBuffer = async (e) => {
 
@@ -50,18 +44,28 @@ export default function Upload() {
     }
 
     const saveToBlockchain = (fileHash) => {
-        console.log(`https://ipfs.infura.io/ipfs/${fileHash}`)
+        console.log(`https://ipfs.infura.io/ipfs/${fileHash}`, title, address)
+
+        dapTubeData.methods.addVideo(`https://ipfs.infura.io/ipfs/${fileHash}`, title).send({ from: address }).on('transactionHash', hash => {
+            console.log('video uploaded!🎉')
+        })
     }
 
     const uploadToIpfs = async (e) => {
-
         if (!file) {
             alert('choose a file')
             return
         }
 
-        const uploadedFile = await IPFS.add(file)
-        saveToBlockchain(uploadedFile.path)
+        try {
+            const uploadedFile = await IPFS.add(file)
+            saveToBlockchain(uploadedFile.path)
+            // saveToBlockchain('QmXzX8GMHdGwhR8BgKBayXBG2eZjfCN3AB8nZgTKNNVg7Z')
+        }
+
+        catch (error) {
+            console.log(error)
+        }
 
         console.log('done!')
 
@@ -104,6 +108,7 @@ export default function Upload() {
                 <div className="color-container">
                     <div className='input-wrapper'>
                         <div><b>Choose video</b></div><br />
+                        {/* <input type='file' className='file-selector' onChange={async (e) => convertFileToBuffer(e)} /> */}
                         <input type='file' className='file-selector' onChange={async (e) => convertFileToBuffer(e)} accept='video/*' />
                     </div>
                     {/* <div className="space-60"></div>
