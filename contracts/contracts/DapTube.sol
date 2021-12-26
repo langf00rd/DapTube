@@ -1,5 +1,5 @@
-pragma solidity >=0.8.0;
-// pragma solidity ^0.5.0;
+pragma solidity ^0.5.0;
+// pragma solidity >=0.8.0;
 
 contract DapTube {
 
@@ -13,6 +13,7 @@ contract DapTube {
         uint id;
         string src;
         string title;
+        string description;
         address owner;
     }
 
@@ -20,10 +21,10 @@ contract DapTube {
     // construction () public {}
 
     // save video blockchain
-    function addVideo(string memory _src, string memory _title) public {
+    function addVideo(string memory _src, string memory _title, string memory _description) public {
         videoCount++;
 
         // save video to contract
-        videos[videoCount] = Video(videoCount, _src, _title, msg.sender);
+        videos[videoCount] = Video(videoCount, _src, _title,_description, msg.sender);
     }
 }
