@@ -8,10 +8,6 @@ export default function Upload() {
     const [description, setDescription] = useState()
     const [file, setFile] = useState()
     const [address, setAddress] = useState(sessionStorage.getItem('address'))
-    const videoTypes = [
-        'video/mp4',
-        'video/mkv',
-    ]
 
     useEffect(() => {
         const initUploadPage = async () => {
@@ -60,7 +56,6 @@ export default function Upload() {
         try {
             const uploadedFile = await IPFS.add(file)
             saveToBlockchain(uploadedFile.path)
-            // saveToBlockchain('QmXzX8GMHdGwhR8BgKBayXBG2eZjfCN3AB8nZgTKNNVg7Z')
         }
 
         catch (error) {
@@ -68,8 +63,6 @@ export default function Upload() {
         }
 
         console.log('done!')
-
-        //check file type before upload
     }
 
     return (
