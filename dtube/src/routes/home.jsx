@@ -1,22 +1,18 @@
 import React, { useEffect, useState } from 'react'
+import { Link } from "react-router-dom";
 import Web3 from 'web3'
 import { CONTRACT_ABI } from '../abis/dapTube.abi'
 
 export default function Home() {
-    const [account, setAccount] = useState();
+    const [account, setAccount] = useState(localStorage.getItem('address'));
     const [dapTube, setDapTube] = useState();
     const [videos, setVideos] = useState([]);
     const [videoCount, setVideoCount] = useState(0);
 
-    useEffect(() => {
-        async function initApp() {
-            await initWeb3()
-            await loadBlockchainData()
-        }
-
-        initApp()
-        return () => { }
-    }, [])
+    async function initApp() {
+        await initWeb3()
+        await loadBlockchainData()
+    }
 
     const initWeb3 = async () => {
         if (window.ethereum) {
@@ -42,6 +38,7 @@ export default function Home() {
             const dapTubeData = await new web3.eth.Contract(CONTRACT_ABI.abi, networkInfo.address)
             const dapTubeVideoCount = await dapTubeData.methods.videoCount().call()
 
+            localStorage.setItem('address', accounts[0])
             setAccount(accounts[0])
             setDapTube(dapTubeData)
             setVideoCount(dapTubeVideoCount)
@@ -63,16 +60,29 @@ export default function Home() {
     return (
         <main>
             <header>
-                <h2>DapTube⚡️</h2>
-                <p style={{ color: 'grey' }}>{account}</p>
+                <div className="header-wrapper flex-between">
+                    <h2>DapTube⚡️</h2>
+                    <input type="text" className="search-box" placeholder='Search for video' />
+                    <div className="flex-between">
+                        <div className="space-20"></div>
+                        {
+                            account
+                                ? <Link to="/upload" className="btn-filled">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-share"><path d="M4 12v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8"></path><polyline points="16 6 12 2 8 6"></polyline><line x1="12" y1="2" x2="12" y2="15"></line></svg>
+                                    Upload video
+                                </Link>
+                                : <a href="#" className="btn-filled " onClick={initApp}>Sign in</a>
+                        }
+                    </div>
+                </div>
             </header>
 
             <div className="poster-container">
                 <div className="poster-item">
-                    <img className='poster-img' src="https://hips.hearstapps.com/hmg-prod.s3.amazonaws.com/images/d1pklzbuyaab0la-1552597012.jpg" alt="" />
+                    <img className='poster-img' src="https://cfvod.kaltura.com/p/1926081/sp/192608100/thumbnail/entry_id/1_48193rbm/version/100001/width/372/height/209" alt="" />
                     <div className="poster-text">
-                        <div><b>The  Avengers</b></div><br />
-                        <b>12mins</b>
+                        <div><small className='poster-title'>The Avengers - Age Of Ultron is nearly over</small></div>
+                        <div><small className='post-time'>12:03</small></div>
                     </div>
                 </div>
             </div>

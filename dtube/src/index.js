@@ -4,6 +4,7 @@ import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
 import Home from './routes/home';
+import Upload from './routes/upload';
 import {
   BrowserRouter,
   Routes,
@@ -15,6 +16,7 @@ ReactDOM.render(
     <Routes>
       <Route path="/" element={<App />} />
       <Route path="home" element={<Home />} />
+      <Route path="upload" element={<Upload />} />
     </Routes>
   </BrowserRouter>,
   document.getElementById('root')
