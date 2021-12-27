@@ -51,22 +51,83 @@ const GET_BLOCKCHAIN_DATA = async () => {
     }
 }
 
-const GENERATE_BUFFER_FROM_FILE = async (file) => {
+const GET_ROUTE_ID = () => {
+    let urlQuery = window.location.search
+    let routeId = urlQuery.substring(1, urlQuery.length)
 
-    try {
-
-        const reader = new FileReader()
-        reader.readAsArrayBuffer(file)
-
-        reader.onloadend = async () => {
-            console.log(Buffer(reader.result))
-            return Buffer(reader.result)
-        }
-
-    } catch (error) {
-        console.log(error)
-        return null;
-    }
+    return routeId
 }
 
-export { GET_BLOCKCHAIN_DATA, GENERATE_BUFFER_FROM_FILE, IPFS, GET_ACCOUNTS }
+const GET_VIDEOS = async () => {
+
+    if (sessionStorage.getItem('videos')) {
+        console.log('videos saved in session!')
+        return JSON.parse(sessionStorage.getItem('videos'))
+    }
+
+    const [isConnected, payload] = await GET_BLOCKCHAIN_DATA()
+
+    if (!isConnected) return []
+
+    const videoCount = await payload.methods.videoCount().call()
+    const videosArray = []
+
+    for (let i = videoCount; i >= 1; i--) {
+        const video = await payload.methods.videos(i).call()
+        videosArray.push(video)
+    }
+
+    return videosArray
+}
+
+const GET_VIDEO_FROM_ID = async (id) => {
+
+    let videos = await GET_VIDEOS()
+
+    for (let i = 0; i < videos.length; i++) {
+        const element = videos[i]
+
+        if (element.id === id) return element
+    }
+
+    return null
+}
+
+
+
+// const GET_VIDEO_METADATA = (file) => {
+//     // var format = require('format-duration')
+
+//     var video = document.createElement('video');
+//     video.preload = 'metadata';
+
+//     video.onloadedmetadata = function () {
+//         window.URL.revokeObjectURL(video.src);
+
+//         if (video.duration < 1) return [false, null];
+
+//         return [true, video]
+//     }
+
+//     video.src = URL.createObjectURL(file);
+// }
+
+// const GENERATE_BUFFER_FROM_FILE = async (file) => {
+
+//     try {
+
+//         const reader = new FileReader()
+//         reader.readAsArrayBuffer(file)
+
+//         reader.onloadend = async () => {
+//             console.log(Buffer(reader.result))
+//             return Buffer(reader.result)
+//         }
+
+//     } catch (error) {
+//         console.log(error)
+//         return null;
+//     }
+// }
+
+export { GET_BLOCKCHAIN_DATA, GET_ROUTE_ID, GET_VIDEOS, GET_VIDEO_FROM_ID, IPFS, GET_ACCOUNTS }

@@ -36,11 +36,13 @@ export default function Home() {
 
         for (let i = dapTubeVideoCount; i >= 1; i--) {
             const video = await payload.methods.videos(i).call()
-            console.log(video)
             videosArray.push(video)
         }
 
+        sessionStorage.setItem('videos', JSON.stringify(videosArray))
         setVideos(videosArray)
+
+        console.log(videosArray[0])
     }
 
     return (
@@ -51,7 +53,7 @@ export default function Home() {
             <div className="posts-container">
                 {
                     videos.map((video, index) => {
-                        return <PosterCard key={index} owner={video.owner} title={video.title} id={video.id} src={video.src} />
+                        return <PosterCard key={index} videoLength={video.videoLength} description={video.description} owner={video.owner} title={video.title} id={video.id} src={video.src} />
                     })
                 }
             </div>

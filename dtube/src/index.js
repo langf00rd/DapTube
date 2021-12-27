@@ -18,7 +18,7 @@ ReactDOM.render(
       <Route path="/" element={<App />} />
       <Route path="home" element={<Home />} />
       <Route path="upload" element={<Upload />} />
-      <Route path="watch/:id" element={<Watch />} />
+      <Route path="watch" element={<Watch />} />
     </Routes>
   </BrowserRouter>,
   document.getElementById('root')

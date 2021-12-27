@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import BackHeader from "../components/BackHeader";
 import Header from "../components/Header";
-import { GET_BLOCKCHAIN_DATA, GENERATE_BUFFER_FROM_FILE, IPFS } from '../constants/constants';
+import { GET_BLOCKCHAIN_DATA, IPFS } from '../constants/constants';
 
 export default function Upload() {
 
@@ -9,6 +9,7 @@ export default function Upload() {
     const [title, setTitle] = useState()
     const [description, setDescription] = useState()
     const [file, setFile] = useState()
+    const [videoLength, setVideoLength] = useState('00:00:00')
     const [address, setAddress] = useState(sessionStorage.getItem('address'))
 
     useEffect(() => {
@@ -27,12 +28,33 @@ export default function Upload() {
         return () => { }
     }, [])
 
-    const goBack = () => window.history.back()
+    const getVideoMetadata = async (file) => {
+        var format = require('format-duration')
+        var video = document.createElement('video');
+
+        video.preload = 'metadata';
+        video.onloadedmetadata = function () {
+            window.URL.revokeObjectURL(video.src);
+
+            if (video.duration < 1) {
+                alert('video too short. choose a new video')
+                return
+            }
+
+            let timeInMilliseconds = (video.duration).toFixed(0) * 1000
+            setVideoLength(format(timeInMilliseconds))
+        }
+
+        video.src = URL.createObjectURL(file);
+    }
 
     const convertFileToBuffer = async (e) => {
 
         const _file = e.target.files[0]
         const reader = new FileReader()
+
+        await getVideoMetadata(_file)
+
         reader.readAsArrayBuffer(_file)
 
         reader.onloadend = async () => {
@@ -44,8 +66,15 @@ export default function Upload() {
     const saveToBlockchain = (fileHash) => {
         console.log(`https://ipfs.infura.io/ipfs/${fileHash}`, title, address)
 
-        dapTubeData.methods.addVideo(`https://ipfs.infura.io/ipfs/${fileHash}`, title).send({ from: address }).on('transactionHash', hash => {
-            console.log('video uploaded!🎉')
+        dapTubeData.methods.addVideo(
+
+            `https://ipfs.infura.io/ipfs/${fileHash}`,
+            title,
+            description,
+            videoLength,
+
+        ).send({ from: address }).on('transactionHash', hash => {
+            alert('video uploaded!🎉')
         })
     }
 
@@ -56,11 +85,11 @@ export default function Upload() {
         }
 
         try {
+
             const uploadedFile = await IPFS.add(file)
             saveToBlockchain(uploadedFile.path)
-        }
 
-        catch (error) {
+        } catch (error) {
             console.log(error)
         }
 
@@ -95,16 +124,13 @@ export default function Upload() {
                         </div>
 
                         <div className="color-container">
+                            <p>{videoLength}</p>
                             <div className='input-wrapper'>
                                 <div><b>Choose video</b></div><br />
-                                {/* <input type='file' className='file-selector' onChange={async (e) => convertFileToBuffer(e)} /> */}
                                 <input type='file' className='file-selector' onChange={async (e) => convertFileToBuffer(e)} accept='video/*' />
                             </div>
-                            {/* <div className="space-40"></div>
-                    <div className='input-wrapper'>
-                        <div><b>Select a thumbnail</b></div><br />
-                        <input type='file' accept="image/*" className='file-selector' onChange={(e) => { setFile(GENERATE_BUFFER_FROM_FILE(e.target.files[0])) }} />
-                    </div> */}
+                            <div className="space-20"></div>
+                            <div className="btn-filled" onClick={uploadToIpfs}>Start upload</div>
                         </div>
                     </div>
                 </div>

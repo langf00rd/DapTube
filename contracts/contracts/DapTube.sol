@@ -14,6 +14,7 @@ contract DapTube {
         string src;
         string title;
         string description;
+        string videoLength;
         address owner;
     }
 
@@ -21,10 +22,10 @@ contract DapTube {
     // construction () public {}
 
     // save video blockchain
-    function addVideo(string memory _src, string memory _title, string memory _description) public {
+    function addVideo(string memory _src, string memory _title, string memory _description, string memory _videoLength ) public {
         videoCount++;
 
         // save video to contract
-        videos[videoCount] = Video(videoCount, _src, _title,_description, msg.sender);
+        videos[videoCount] = Video(videoCount, _src, _title, _description, _videoLength, msg.sender);
     }
 }
