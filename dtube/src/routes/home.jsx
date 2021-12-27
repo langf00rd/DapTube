@@ -3,47 +3,26 @@ import { Link, useNavigate } from "react-router-dom";
 import Header from '../components/Header';
 import PosterCard from '../components/posterCard';
 import TagsHeader from '../components/TagsHeader';
-import { GET_BLOCKCHAIN_DATA, GET_ACCOUNTS } from "../constants/constants"
+import { GET_VIDEOS } from "../constants/constants"
 
 export default function Home() {
     let navigate = useNavigate();
-    const [account, setAccount] = useState(sessionStorage.getItem('address'));
-    const [dapTube, setDapTube] = useState();
     const [videos, setVideos] = useState([]);
-    const [videoCount, setVideoCount] = useState(0);
 
     useEffect(() => {
-        if (!account) {
-            navigate('/')
-            return
+        const initPage = async () => {
+
+            if (!sessionStorage.getItem('address')) {
+                navigate('/')
+                return
+            }
+
+            setVideos(await GET_VIDEOS())
         }
 
-        loadVideos()
+        initPage()
         return () => { }
     }, [])
-
-    const loadVideos = async () => {
-
-        const [isConnected, payload] = await GET_BLOCKCHAIN_DATA()
-        if (!isConnected) return
-
-        const dapTubeVideoCount = await payload.methods.videoCount().call()
-        const videosArray = []
-
-        setDapTube(payload)
-        setAccount(await GET_ACCOUNTS())
-        setVideoCount(dapTubeVideoCount)
-
-        for (let i = dapTubeVideoCount; i >= 1; i--) {
-            const video = await payload.methods.videos(i).call()
-            videosArray.push(video)
-        }
-
-        sessionStorage.setItem('videos', JSON.stringify(videosArray))
-        setVideos(videosArray)
-
-        console.log(videosArray[0])
-    }
 
     return (
         <main>

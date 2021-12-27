@@ -77,6 +77,7 @@ const GET_VIDEOS = async () => {
         videosArray.push(video)
     }
 
+    sessionStorage.setItem(videosArray)
     return videosArray
 }
 

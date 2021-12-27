@@ -5,7 +5,6 @@ import Header from "../components/Header";
 import PosterCard from "../components/posterCard";
 
 export default function Watch() {
-
     const [videos, setVideos] = useState([])
     const [currentVideo, setCurrentVideo] = useState({})
 
@@ -21,7 +20,7 @@ export default function Watch() {
                 return
             }
 
-            const currentVideo = setCurrentVideo(await GET_VIDEO_FROM_ID(GET_ROUTE_ID()))
+            setCurrentVideo(await GET_VIDEO_FROM_ID(GET_ROUTE_ID()))
         }
 
         initPage()
