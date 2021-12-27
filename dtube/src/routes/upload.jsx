@@ -5,6 +5,7 @@ import { GET_BLOCKCHAIN_DATA, IPFS } from '../constants/constants';
 
 export default function Upload() {
 
+    const [isLoading, setIsLoading] = useState(false)
     const [dapTubeData, setDapTubeData] = useState()
     const [title, setTitle] = useState()
     const [description, setDescription] = useState()
@@ -67,13 +68,12 @@ export default function Upload() {
         console.log(`https://ipfs.infura.io/ipfs/${fileHash}`, title, address)
 
         dapTubeData.methods.addVideo(
-
             `https://ipfs.infura.io/ipfs/${fileHash}`,
             title,
             description,
             videoLength,
-
         ).send({ from: address }).on('transactionHash', hash => {
+            setIsLoading(false)
             alert('video uploaded!🎉')
         })
     }
@@ -86,23 +86,25 @@ export default function Upload() {
 
         try {
 
+            setIsLoading(true)
             const uploadedFile = await IPFS.add(file)
             saveToBlockchain(uploadedFile.path)
 
         } catch (error) {
+            setIsLoading(false)
             console.log(error)
         }
 
         console.log('done!')
     }
 
-    return (
+    if (!isLoading) return (
         <div>
             <Header />
             <BackHeader title='Upload your video' />
-            <div style={{ padding: '20px', paddingTop: '0' }}>
+            <div style={{ padding: '20px', paddingTop: '0' }} className='flex-center'>
                 <div>
-                    <div className="flex-between">
+                    <div className="flex-between-top">
                         <div className="color-container">
                             <div className='input-wrapper'>
                                 <div><b>Video title</b></div><br />
@@ -123,6 +125,8 @@ export default function Upload() {
                             </div>
                         </div>
 
+                        <div className="space-20"></div>
+
                         <div className="color-container">
                             <p>{videoLength}</p>
                             <div className='input-wrapper'>
@@ -136,52 +140,15 @@ export default function Upload() {
                 </div>
             </div>
         </div>
+    );
 
-        // <div className='pd-container'>
-        //     <div className="flex back-button" onClick={goBack}>
-        //         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-arrow-left"><line x1="19" y1="12" x2="5" y2="12"></line><polyline points="12 19 5 12 12 5"></polyline></svg>
-        //         <b>back</b>
-        //     </div>
-        //     <div className="flex-between">
-        //         <h1>Upload your video</h1>
-        //         <div className="btn-filled" onClick={uploadToIpfs}>Start upload</div>
-        //     </div>
-        //     <div className="space-20"></div>
-
-        //     <div className="flex-between">
-        //         <div className="color-container">
-        //             <div className='input-wrapper'>
-        //                 <div><b>Video title</b></div><br />
-        //                 <input type="text" className='text-input-2' onChange={(e) => { setTitle(e.target.value) }} placeholder='My cat video' />
-        //             </div>
-        //             <div className="space-40"></div>
-
-        //             <div className='input-wrapper'>
-        //                 <div><b>Description</b></div><br />
-        //                 <textarea className='text-input-2' placeholder='My video is cool' onChange={(e) => { setDescription(e.target.value) }}></textarea>
-        //             </div>
-        //             <div className="space-40"></div>
-
-        //             <div className='input-wrapper'>
-        //                 <div><b>Wallet address</b></div>
-        //                 <p className='grey-text'>This is the wallet address where you will receive funds from your viewers.</p><br />
-        //                 <input type="text" value={address} onChange={(e) => { setAddress(e.target.value) }} className='text-input-2' />
-        //             </div>
-        //         </div>
-
-        //         <div className="color-container">
-        //             <div className='input-wrapper'>
-        //                 <div><b>Choose video</b></div><br />
-        //                 {/* <input type='file' className='file-selector' onChange={async (e) => convertFileToBuffer(e)} /> */}
-        //                 <input type='file' className='file-selector' onChange={async (e) => convertFileToBuffer(e)} accept='video/*' />
-        //             </div>
-        //             {/* <div className="space-40"></div>
-        //             <div className='input-wrapper'>
-        //                 <div><b>Select a thumbnail</b></div><br />
-        //                 <input type='file' accept="image/*" className='file-selector' onChange={(e) => { setFile(GENERATE_BUFFER_FROM_FILE(e.target.files[0])) }} />
-        //             </div> */}
-        //         </div>
-        //     </div>
-        // </div>
+    else return (
+        <div>
+            <Header />
+            <div className="fullscreen flex-center">
+                <h2>Video uploading ...</h2>
+                <p>Do not leave this screen else upload will be cancelled</p>
+            </div>
+        </div>
     );
 }

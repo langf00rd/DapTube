@@ -1,36 +1,37 @@
 import React, { useEffect, useState } from "react";
-import { GET_BLOCKCHAIN_DATA, GET_ROUTE_ID, GET_VIDEOS, GET_VIDEO_FROM_ID } from "../constants/constants";
-import BackHeader from '../components/BackHeader';
+import { GET_ROUTE_ID, GET_VIDEOS, GET_VIDEO_FROM_ID } from "../constants/constants";
 import Header from "../components/Header";
 import PosterCard from "../components/posterCard";
-import { useLocation, Switch } from 'react-router-dom';
-
-// import { useHistory } from 'react-router-dom'
-// import { createHistory } from 'react-router';
-// import { createHistory } from "react-router-dom";
-
-// import createHistory from 'history/createBrowserHistory';
-
+import { useLocation } from 'react-router-dom';
+import EmptyState from '../assets/e.png'
+import { createAvatar } from '@dicebear/avatars';
+import * as style from '@dicebear/adventurer';
 
 
 export default function Watch() {
     const location = useLocation();
 
+    const [videoExist, setVideoExist] = useState(true)
+    const [avatar, setAvatar] = useState()
     const [videos, setVideos] = useState([])
     const [currentVideo, setCurrentVideo] = useState({})
 
     useEffect(() => {
 
+        let svg = createAvatar(style, { seed: (Date.now() + Math.random() * 1000).toString() });
+        setAvatar(svg)
+
         const initPage = async () => {
             setVideos(await GET_VIDEOS())
 
             if (!await GET_VIDEO_FROM_ID(GET_ROUTE_ID())) {
-                alert('video does not exist')
+                setVideoExist(false)
                 setCurrentVideo({})
 
                 return
             }
 
+            setVideoExist(true)
             setCurrentVideo(await GET_VIDEO_FROM_ID(GET_ROUTE_ID()))
         }
 
@@ -39,7 +40,7 @@ export default function Watch() {
         return () => { }
     }, [location])
 
-    return (
+    if (videoExist) return (
         <div>
             <Header />
 
@@ -51,13 +52,24 @@ export default function Watch() {
                         </video>
                         <div className="playing-video-text">
                             <h2 className='playing-video-title'>{currentVideo.title}</h2>
-                            <small>{currentVideo.description}</small>
-                            <div className='flex-between'>
-                                <small>{currentVideo.owner}</small>
+                            <div className="flex-between">
+                                <div className="flex">
+                                    <div className="avatar" dangerouslySetInnerHTML={{ __html: avatar }} ></div>
+                                    <div className="space-10"></div>
+                                    <div>
+                                        <b>Space Boy</b>
+                                        <div className="space-5"></div>
+                                        <div><small className='grey-text'>{currentVideo.owner}</small></div>
+                                    </div>
+                                </div>
                                 <div className="btn-filled">
                                     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-dollar-sign"><line x1="12" y1="1" x2="12" y2="23"></line><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path></svg>
                                     Donate to creator
                                 </div>
+                            </div>
+                            <div className="space-20"></div>
+                            <div style={{ maxWidth: '700px' }}>
+                                <small>{currentVideo.description}</small>
                             </div>
                         </div>
                         <div className="space-20"></div>
@@ -71,7 +83,7 @@ export default function Watch() {
                     </div>
 
                     <div className="side-video-list">
-                        <h2>See also</h2>
+                        <b>Watch next</b>
                         {
                             videos.map((video, index) => {
                                 return <PosterCard key={index} videoLength={video.videoLength} description={video.description} owner={video.owner} title={video.title} id={video.id} src={video.src} />
@@ -80,6 +92,17 @@ export default function Watch() {
                     </div>
                 </div>
             </div>
-        </div>
+        </div >
     );
+
+    else return (
+        <p>
+            <Header />
+
+            <div className="fullscreen flex-center">
+                <img src={EmptyState} className='empty-state-img' alt="Video does not exist" />
+                <h2>Oops! Video not found</h2>
+            </div>
+
+        </p>);
 }

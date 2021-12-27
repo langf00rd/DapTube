@@ -3,12 +3,17 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "@dicebear/adventurer": "^4.10.2",
+    "@dicebear/avatars": "^4.10.2",
+    "@dicebear/avatars-identicon-sprites": "^4.10.2",
+    "convert-svg-react": "^1.0.0-beta.8",
     "format-duration": "^1.4.0",
     "ipfs-http-client": "^55.0.0",
     "react": "^16.8.3",
     "react-dom": "^16.8.3",
     "react-router-dom": "^6.2.1",
     "react-scripts": "2.1.5",
+    "react-svg": "^14.1.6",
     "web-vitals": "^2.1.2",
     "web3": "^1.0.0-beta.46"
   },
