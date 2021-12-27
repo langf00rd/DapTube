@@ -60,11 +60,6 @@ const GET_ROUTE_ID = () => {
 
 const GET_VIDEOS = async () => {
 
-    if (sessionStorage.getItem('videos')) {
-        console.log('videos saved in session!')
-        return JSON.parse(sessionStorage.getItem('videos'))
-    }
-
     const [isConnected, payload] = await GET_BLOCKCHAIN_DATA()
 
     if (!isConnected) return []
@@ -77,8 +72,20 @@ const GET_VIDEOS = async () => {
         videosArray.push(video)
     }
 
-    sessionStorage.setItem(videosArray)
+    sessionStorage.setItem('videos', JSON.stringify(videosArray))
+
     return videosArray
+
+    // if (sessionStorage.getItem('videos') && getNewVideos) { }
+    // if (!sessionStorage.getItem('videos') && getNewVideos) { }
+
+
+    // if (sessionStorage.getItem('videos')) {
+    //     console.log('videos saved in session!')
+    //     return JSON.parse(sessionStorage.getItem('videos'))
+    // }
+
+
 }
 
 const GET_VIDEO_FROM_ID = async (id) => {

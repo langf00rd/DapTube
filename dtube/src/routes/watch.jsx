@@ -3,15 +3,26 @@ import { GET_BLOCKCHAIN_DATA, GET_ROUTE_ID, GET_VIDEOS, GET_VIDEO_FROM_ID } from
 import BackHeader from '../components/BackHeader';
 import Header from "../components/Header";
 import PosterCard from "../components/posterCard";
+import { useLocation, Switch } from 'react-router-dom';
+
+// import { useHistory } from 'react-router-dom'
+// import { createHistory } from 'react-router';
+// import { createHistory } from "react-router-dom";
+
+// import createHistory from 'history/createBrowserHistory';
+
+
 
 export default function Watch() {
+    const location = useLocation();
+
     const [videos, setVideos] = useState([])
     const [currentVideo, setCurrentVideo] = useState({})
 
     useEffect(() => {
 
         const initPage = async () => {
-            setVideos(GET_VIDEOS())
+            setVideos(await GET_VIDEOS())
 
             if (!await GET_VIDEO_FROM_ID(GET_ROUTE_ID())) {
                 alert('video does not exist')
@@ -26,7 +37,7 @@ export default function Watch() {
         initPage()
 
         return () => { }
-    }, [])
+    }, [location])
 
     return (
         <div>
@@ -61,12 +72,11 @@ export default function Watch() {
 
                     <div className="side-video-list">
                         <h2>See also</h2>
-                        <PosterCard title='video.title' src='video.src' />
-                        <PosterCard title='video.title' src='video.src' />
-                        <PosterCard title='video.title' src='video.src' />
-                        <PosterCard title='video.title' src='video.src' />
-                        <PosterCard title='video.title' src='video.src' />
-                        <PosterCard title='video.title' src='video.src' />
+                        {
+                            videos.map((video, index) => {
+                                return <PosterCard key={index} videoLength={video.videoLength} description={video.description} owner={video.owner} title={video.title} id={video.id} src={video.src} />
+                            })
+                        }
                     </div>
                 </div>
             </div>
