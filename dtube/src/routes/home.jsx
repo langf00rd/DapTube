@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import { Link, useNavigate } from "react-router-dom";
 import Header from '../components/Header';
+import PosterCard from '../components/posterCard';
 import TagsHeader from '../components/TagsHeader';
 import { GET_BLOCKCHAIN_DATA, GET_ACCOUNTS } from "../constants/constants"
 
@@ -50,13 +51,7 @@ export default function Home() {
             <div className="posts-container">
                 {
                     videos.map((video, index) => {
-                        return <div key={index} className="poster-item">
-                            <Link to='/watch'> <video className='poster-img' src={video.src}></video></Link>
-                            <div className="poster-text">
-                                <div><small className='poster-title'>{video.title}</small></div>
-                                <div><small className='post-time'>12:03</small></div>
-                            </div>
-                        </div>
+                        return <PosterCard key={index} owner={video.owner} title={video.title} id={video.id} src={video.src} />
                     })
                 }
             </div>
