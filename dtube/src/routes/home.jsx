@@ -32,7 +32,7 @@ export default function Home() {
             <div className="posts-container">
                 {
                     videos.map((video, index) => {
-                        return <PosterCard key={index} videoLength={video.videoLength} description={video.description} owner={video.owner} title={video.title} id={video.id} src={video.src} />
+                        return <PosterCard key={index} thumbnail={video.thumbnail} videoLength={video.videoLength} description={video.description} owner={video.owner} title={video.title} id={video.id} src={video.src} />
                     })
                 }
             </div>

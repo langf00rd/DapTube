@@ -192,15 +192,19 @@ header {
   width: 250px;
   overflow: hidden;
   margin: 30px 8px;
+  background: #1e1e1e;
+  border: 2px solid #242424;
 }
 
 .poster-text {
   width: 100%;
+  padding: 0 10px 10px 10px;
 }
 
 .poster-title {
   display: block;
   margin: 10px 0;
+  /* font-weight: normal; */
 }
 
 .post-time {
@@ -227,7 +231,7 @@ header {
   width: 100%;
   height: 150px;
   object-fit: cover;
-  border-radius: 5px;
+  /* border-radius: 5px; */
   cursor: pointer;
   transition: 0.3s linear;
   /* filter: brightness(0.8); */

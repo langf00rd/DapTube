@@ -19,19 +19,20 @@ const PosterCard = (props) => {
 
     return (
         <div className="poster-item">
-            <video onClick={navigateToWatchScreen} muted={true} className='poster-img' src={props.src}>
+            {/* <video onClick={navigateToWatchScreen} muted={true} className='poster-img' src={props.src}>
                 <source src={props.src} type="video/*" />
-            </video>
-            <div className="poster-text">
-                {/* <div><small className='poster-title'><b>{props.title}</b></small></div> */}
+            </video> */}
 
+            <img src={props.thumbnail} onClick={navigateToWatchScreen} className='poster-img' alt={props.title} />
+
+            <div className="poster-text">
                 <div className="space-10"></div>
                 <div><small className='post-time'>{props.videoLength ? props.videoLength : '00:--'}</small></div>
                 <div className="flex-top">
                     <div> <div className="avatar avatar-sm" dangerouslySetInnerHTML={{ __html: avatar }} ></div></div>
                     <div className="space-10"></div>
                     <div>
-                        <b><small>{props.title}</small></b>
+                        <small>{props.title}</small>
                         <div><small className='grey-text'>Space boy</small></div>
                     </div>
                 </div>

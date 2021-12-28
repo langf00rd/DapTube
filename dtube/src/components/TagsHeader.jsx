@@ -18,11 +18,7 @@ export default class TagsHeader extends React.Component {
                 <div className="tag-item">Science, tech</div>
                 <div className="tag-item">Gaming</div>
                 <div className="tag-item">Novels</div>
-                <div className="tag-item">Novels</div>
-                <div className="tag-item">Novels</div>
-                <div className="tag-item">Novels</div>
-                <div className="tag-item">Novels</div>
-                <div className="tag-item">Novels</div>
+                <div className="tag-item">Other</div>
             </div>
         );
     }

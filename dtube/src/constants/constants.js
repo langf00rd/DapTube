@@ -71,46 +71,22 @@ const GET_VIDEO_FROM_ID = async (id) => {
     return null
 }
 
-const UPLOAD__VIDEO_TO_IPFS = async (file) => {
+const UPLOAD_TO_IPFS = async (file) => {
 
-    if (!file) return [false, 'Please choose a video', null]
-
-    try {
-
-        const uploadedFilePath = await (IPFS.add(file)).path
-
-        return [true, 'video uploaded to ipfs', uploadedFilePath]
-
-    } catch (error) {
-        return [false, 'An error occured uploading video', null]
-    }
-}
-
-const SAVE_TO_BLOCKCHAIN = async (
-    videoHash,
-    dapTubeData,
-    title,
-    description,
-    videoLength,
-    address) => {
+    if (!file) return [false, 'Please choose a file to upload', null]
 
     try {
 
-        await dapTubeData.methods.addVideo(
-            `https://ipfs.infura.io/ipfs/${videoHash}`,
-            title,
-            description,
-            videoLength,
-        ).send({ from: address }).on('transactionHash', hash => {
+        const uploadedFilePath = await (IPFS.add(file))
 
-            return [true, 'Video uploaded!🎉']
-        })
+        return [true, 'Uploaded to ipfs', uploadedFilePath.path]
 
     } catch (error) {
 
-        return [false, 'Sorry.Could not complete upload.Check your network connection']
+        return [false, 'An error occured uploading file', null]
     }
 }
+
 
 const GET_VIDEOS = async () => {
 
@@ -179,4 +155,27 @@ const GET_VIDEOS = async () => {
 //     }
 // }
 
-export { GET_BLOCKCHAIN_DATA, GET_ROUTE_ID, GET_VIDEOS, GET_VIDEO_FROM_ID, UPLOAD__VIDEO_TO_IPFS, SAVE_TO_BLOCKCHAIN, IPFS, GET_ACCOUNTS }
+
+// const SAVE_TO_BLOCKCHAIN = (videoPath, thumbnailPath, dapTubeData, title, description, videoLength, address) => {
+//     try {
+//         const methods = dapTubeData.methods
+
+//         methods.addVideo(
+//             `https://ipfs.infura.io/ipfs/${videoPath}`,
+//             `https://ipfs.infura.io/ipfs/${thumbnailPath}`,
+//             title,
+//             description,
+//             videoLength,
+//         ).send({ from: address }).on('transactionHash', hash => {
+
+//             return [true, 'Video uploaded!🎉']
+//         })
+
+//     } catch (error) {
+
+//         console.log(error)
+//         return [false, 'Sorry.Could not complete upload.Check your network connection']
+//     }
+// }
+
+export { GET_BLOCKCHAIN_DATA, GET_ROUTE_ID, GET_VIDEOS, GET_VIDEO_FROM_ID, UPLOAD_TO_IPFS, IPFS, GET_ACCOUNTS }
