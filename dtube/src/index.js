@@ -11,6 +11,7 @@ import {
   Route
 } from "react-router-dom";
 import Watch from './routes/watch';
+import Tag from './routes/tag';
 
 ReactDOM.render(
   <BrowserRouter>
@@ -19,6 +20,7 @@ ReactDOM.render(
       <Route path="home" element={<Home />} />
       <Route path="upload" element={<Upload />} />
       <Route path="watch" element={<Watch />} />
+      <Route path="tag" element={<Tag />} />
     </Routes>
   </BrowserRouter>,
   document.getElementById('root')

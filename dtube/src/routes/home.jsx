@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import Header from '../components/Header';
 import PosterCard from '../components/posterCard';
 import TagsHeader from '../components/TagsHeader';
@@ -32,7 +32,7 @@ export default function Home() {
             <div className="posts-container">
                 {
                     videos.map((video, index) => {
-                        return <PosterCard key={index} thumbnail={video.thumbnail} videoLength={video.videoLength} description={video.description} owner={video.owner} title={video.title} id={video.id} src={video.src} />
+                        return <PosterCard key={index} tags={video.tags} thumbnail={video.thumbnail} videoLength={video.videoLength} description={video.description} owner={video.owner} title={video.title} id={video.id} src={video.src} />
                     })
                 }
             </div>

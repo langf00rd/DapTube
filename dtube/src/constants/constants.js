@@ -4,6 +4,19 @@ import { create } from 'ipfs-http-client'
 
 const IPFS = create({ host: 'ipfs.infura.io', port: 5001, protocol: 'https' })
 
+const VIDEO_TAGS = [
+    'Music',
+    'Space',
+    'Movies',
+    'Programming',
+    'Sales',
+    'History',
+    'Psychology',
+    'Science',
+    'Gaming',
+    'Novels'
+]
+
 const CONNECT_TO_WEB3 = async () => {
 
     try {
@@ -51,14 +64,14 @@ const GET_BLOCKCHAIN_DATA = async () => {
     }
 }
 
-const GET_ROUTE_ID = () => {
+const GET_ROUTE_PARAM = () => {
     let urlQuery = window.location.search
     let routeId = urlQuery.substring(1, urlQuery.length)
 
     return routeId
 }
 
-const GET_VIDEO_FROM_ID = async (id) => {
+const GET_VIDEO_BY_ID = async (id) => {
 
     let videos = await GET_VIDEOS()
 
@@ -69,6 +82,22 @@ const GET_VIDEO_FROM_ID = async (id) => {
     }
 
     return null
+}
+
+const GET_VIDEOS_BY_TAG = async (tag) => {
+
+    let videos = await GET_VIDEOS()
+    let videosWithTags = []
+
+    videos.forEach(video => {
+
+        if (video.tags.includes(tag)) videosWithTags.push(video)
+
+    })
+
+    if (videosWithTags.length <= 0) return 0
+
+    return videosWithTags
 }
 
 const UPLOAD_TO_IPFS = async (file) => {
@@ -87,6 +116,9 @@ const UPLOAD_TO_IPFS = async (file) => {
     }
 }
 
+const CAPITALIZE_STRING = (string) => {
+    return string.charAt(0).toUpperCase() + string.slice(1)
+}
 
 const GET_VIDEOS = async () => {
 
@@ -178,4 +210,4 @@ const GET_VIDEOS = async () => {
 //     }
 // }
 
-export { GET_BLOCKCHAIN_DATA, GET_ROUTE_ID, GET_VIDEOS, GET_VIDEO_FROM_ID, UPLOAD_TO_IPFS, IPFS, GET_ACCOUNTS }
+export { GET_BLOCKCHAIN_DATA, GET_ROUTE_PARAM, VIDEO_TAGS, GET_VIDEOS, GET_VIDEOS_BY_TAG, CAPITALIZE_STRING, GET_VIDEO_BY_ID, UPLOAD_TO_IPFS, IPFS, GET_ACCOUNTS }

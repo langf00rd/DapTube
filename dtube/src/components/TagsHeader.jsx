@@ -1,25 +1,25 @@
 import React from "react";
+import { useNavigate } from "react-router-dom";
+import { VIDEO_TAGS } from "../constants/constants";
 
-export default class TagsHeader extends React.Component {
-    goBack = () => window.history.back()
+const TagsHeader = () => {
+    let navigate = useNavigate()
 
-    render() {
-        return (
-            <div className="tags-bar">
-                <div className="tag-item">All</div>
-                <div className="tag-item">Recently uploaded</div>
-                <div className="tag-item">Music</div>
-                <div className="tag-item">Space</div>
-                <div className="tag-item">Movies</div>
-                <div className="tag-item">Programming</div>
-                <div className="tag-item">Sales</div>
-                <div className="tag-item">History</div>
-                <div className="tag-item">Psychology</div>
-                <div className="tag-item">Science, tech</div>
-                <div className="tag-item">Gaming</div>
-                <div className="tag-item">Novels</div>
-                <div className="tag-item">Other</div>
-            </div>
-        );
+    const viewTag = (tag) => {
+        console.log(tag)
+
+        navigate(`/tag?${tag}`)
     }
+
+    return (
+        <div className="tags-bar">
+            {
+                VIDEO_TAGS.map((tag, index) => {
+                    return <div onClick={() => viewTag(tag)} key={index} className="tag-item">{tag}</div>
+                })
+            }
+        </div>
+    );
 }
+
+export default TagsHeader

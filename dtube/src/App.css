@@ -6,7 +6,7 @@
 
 body {
   color: #fff;
-  background-color: #181818;
+  background-color: #0e1217;
 }
 
 .back-header {
@@ -37,7 +37,7 @@ body {
 }
 
 .color-container {
-  background-color: #202020;
+  background-color: #1d1f26;
   padding: 20px;
   border-radius: 10px;
   border: 2px solid #9999991c;
@@ -55,7 +55,7 @@ body {
 
 .tag-item {
   white-space: nowrap;
-  background: #202020;
+  background: #1d1f26;
   border: 2px solid #9999991c;
   border-radius: 100px;
   width: min-content;
@@ -81,7 +81,7 @@ header {
   justify-content: space-between;
   /* padding: 20px; */
   height: 70px;
-  background: #202020ba;
+  background: #1d1f26e8;
   z-index: 10;
   -webkit-backdrop-filter: blur(30px);
   backdrop-filter: blur(26px);
@@ -96,7 +96,7 @@ header {
 
 .avatar {
   /* border: 2px solid #9999991c; */
-  /* background: #181818; */
+  /* background: #0F1218; */
   border-radius: 100px;
   width: 70px;
   height: 70px;
@@ -115,7 +115,7 @@ header {
 }
 
 .icon-btn {
-  background: #181818;
+  background: #0f1218;
   border-radius: 100px;
   width: 40px;
   height: 40px;
@@ -141,7 +141,7 @@ header {
   padding: 6px 21px;
   border: none;
   border-radius: 10px;
-  background: #181818;
+  background: #0f1218;
   font-size: 16px;
   outline: none;
   color: #fff;
@@ -189,10 +189,10 @@ header {
 
 .poster-item {
   position: relative;
-  width: 250px;
+  width: 300px;
   overflow: hidden;
   margin: 30px 8px;
-  background: #1e1e1e;
+  background: #1d1f26;
   border: 2px solid #242424;
 }
 
@@ -231,14 +231,12 @@ header {
   width: 100%;
   height: 150px;
   object-fit: cover;
-  /* border-radius: 5px; */
   cursor: pointer;
   transition: 0.3s linear;
   /* filter: brightness(0.8); */
 }
 
 .poster-img:hover {
-  /* transform: scale(1.2); */
   filter: brightness(0.5);
 }
 
@@ -247,13 +245,6 @@ main {
   height: 100vh;
   width: 100vw;
   overflow-y: scroll;
-  /* padding: 30px; */
-  /* display: flex;
-  align-items: center;
-  justify-content: center;
-  flex-direction: column;
-  height: 100vh;
-  background: linear-gradient(45deg, #2196f3, #02aefb0d,#e91e63); */
 }
 
 .flex {
@@ -336,9 +327,10 @@ main {
   padding: 7px;
   color: #fff;
   border: 2px solid;
-  border-color: #1e1e1e;
+  border-color: #1d1f26;
   font-size: 14px;
   color: #ebebeb8f;
+  cursor: pointer;
   border-radius: 10px;
   transition: 0.2s linear;
 }
@@ -349,7 +341,7 @@ main {
 }
 
 .side-video-list {
-  /* background-color: #1e1e1e; */
+  /* background-color: #1d1f26; */
   flex: 1;
   /* padding: 15px; */
   /* padding-top: 0; */
@@ -359,7 +351,7 @@ main {
 }
 
 .text-input-2 {
-  background: #181818;
+  background: #0f1218;
   border: 2px solid;
   border-color: #242424;
   padding: 16px;
@@ -371,7 +363,7 @@ main {
 }
 
 .file-selector {
-  background: #181818;
+  background: #0f1218;
   padding: 24px;
   cursor: pointer;
   border-radius: 10px;

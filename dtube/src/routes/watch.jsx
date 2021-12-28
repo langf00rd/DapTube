@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from "react";
-import { GET_ROUTE_ID, GET_VIDEOS, GET_VIDEO_FROM_ID } from "../constants/constants";
+import { GET_ROUTE_PARAM, GET_VIDEOS, GET_VIDEO_BY_ID } from "../constants/constants";
 import Header from "../components/Header";
 import PosterCard from "../components/posterCard";
-import { useLocation } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import EmptyState from '../assets/e.png'
 import { createAvatar } from '@dicebear/avatars';
 import * as style from '@dicebear/adventurer';
@@ -10,6 +10,7 @@ import * as style from '@dicebear/adventurer';
 
 export default function Watch() {
     const location = useLocation();
+    let navigate = useNavigate()
 
     const [videoExist, setVideoExist] = useState(true)
     const [avatar, setAvatar] = useState()
@@ -18,27 +19,34 @@ export default function Watch() {
 
     useEffect(() => {
 
-        let svg = createAvatar(style, { seed: (Date.now() + Math.random() * 1000).toString() });
-        setAvatar(svg)
-
         const initPage = async () => {
-            setVideos(await GET_VIDEOS())
 
-            if (!await GET_VIDEO_FROM_ID(GET_ROUTE_ID())) {
+            if (!await GET_VIDEO_BY_ID(GET_ROUTE_PARAM())) {
                 setVideoExist(false)
                 setCurrentVideo({})
-
                 return
             }
 
+            let svg = createAvatar(style, { seed: (Date.now() + Math.random() * 1000).toString() });
+
+
+            setAvatar(svg)
+            setVideos(await GET_VIDEOS())
             setVideoExist(true)
-            setCurrentVideo(await GET_VIDEO_FROM_ID(GET_ROUTE_ID()))
+            setCurrentVideo(await GET_VIDEO_BY_ID(GET_ROUTE_PARAM()))
+
         }
 
         initPage()
-
         return () => { }
+
     }, [location])
+
+    const viewTag = (tag) => {
+        console.log(tag)
+
+        navigate(`/tag?${tag}`)
+    }
 
     if (videoExist) return (
         <div>
@@ -74,11 +82,12 @@ export default function Watch() {
                         </div>
                         <div className="space-20"></div>
                         <div className="flex">
-                            <a className='playing-video-tag-item' href="#">#art</a>
-                            <a className='playing-video-tag-item' href="#">#technology</a>
-                            <a className='playing-video-tag-item' href="#">#web3</a>
-                            <a className='playing-video-tag-item' href="#">#blockchain</a>
-                            <a className='playing-video-tag-item' href="#">#crypto</a>
+                            {
+                                currentVideo.tags
+                                    ? currentVideo.tags.split(',').map((tag, index) => {
+                                        return <div onClick={() => viewTag(tag)} className='playing-video-tag-item' style={{ marginRight: '5px' }} key={index}>#{tag}</div>
+                                    }) : ''
+                            }
                         </div>
                     </div>
 
@@ -86,7 +95,7 @@ export default function Watch() {
                         <b>Watch next</b>
                         {
                             videos.map((video, index) => {
-                                return <PosterCard key={index} thumbnail={video.thumbnail} videoLength={video.videoLength} description={video.description} owner={video.owner} title={video.title} id={video.id} src={video.src} />
+                                return <PosterCard key={index} tags={video.tags} thumbnail={video.thumbnail} videoLength={video.videoLength} description={video.description} owner={video.owner} title={video.title} id={video.id} src={video.src} />
                             })
                         }
                     </div>

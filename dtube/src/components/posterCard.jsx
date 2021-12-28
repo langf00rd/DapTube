@@ -7,6 +7,7 @@ import AvatarSvg from "../components/AvatarSvg";
 const PosterCard = (props) => {
     let navigate = useNavigate()
     const [avatar, setAvatar] = useState()
+    const [tags, setTags] = useState([])
 
     const navigateToWatchScreen = () => { navigate(`/watch?${props.id}`) }
 
@@ -14,15 +15,13 @@ const PosterCard = (props) => {
         let svg = createAvatar(style, { seed: (Date.now() + Math.random() * 1000).toString() });
         setAvatar(svg)
 
+        setTags(props.tags.split(','))
+
         return () => { }
     }, [])
 
     return (
         <div className="poster-item">
-            {/* <video onClick={navigateToWatchScreen} muted={true} className='poster-img' src={props.src}>
-                <source src={props.src} type="video/*" />
-            </video> */}
-
             <img src={props.thumbnail} onClick={navigateToWatchScreen} className='poster-img' alt={props.title} />
 
             <div className="poster-text">
@@ -35,6 +34,14 @@ const PosterCard = (props) => {
                         <small>{props.title}</small>
                         <div><small className='grey-text'>Space boy</small></div>
                     </div>
+                </div>
+                <div className="space-10"></div>
+                <div>
+                    {
+                        tags.map((tag, index) => {
+                            return <small className='grey-text' style={{ marginRight: '5px' }} key={index}>#{tag}</small>
+                        })
+                    }
                 </div>
             </div>
         </div >

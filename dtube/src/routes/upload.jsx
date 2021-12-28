@@ -1,9 +1,11 @@
 import React, { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import BackHeader from "../components/BackHeader";
 import Header from "../components/Header";
-import { GET_BLOCKCHAIN_DATA, UPLOAD_TO_IPFS } from '../constants/constants';
+import { GET_BLOCKCHAIN_DATA, UPLOAD_TO_IPFS, CAPITALIZE_STRING } from '../constants/constants';
 
 export default function Upload() {
+    let navigate = useNavigate();
 
     const [address, setAddress] = useState(sessionStorage.getItem('address'))
     const [videoLength, setVideoLength] = useState('00:00:00')
@@ -13,12 +15,14 @@ export default function Upload() {
     const [dapTubeData, setDapTubeData] = useState()
     const [videoBuffer, setVideoBuffer] = useState()
     const [title, setTitle] = useState('')
+    const [tags, setTags] = useState('')
 
     useEffect(() => {
         const initUploadPage = async () => {
-            if (!address) {
-                alert('Please login')
-                window.history.back()
+
+            if (!sessionStorage.getItem('address')) {
+                navigate('/')
+                return
             }
 
             const [isConnected, payload] = await GET_BLOCKCHAIN_DATA()
@@ -95,8 +99,7 @@ export default function Upload() {
         return [true, path]
     }
 
-    const saveToBlockchain = (videoPath, thumbnailPath, dapTubeData, title, description, videoLength, address) => {
-        // UI Design tutorial Figma Adobe XD
+    const saveToBlockchain = (videoPath, thumbnailPath, dapTubeData, title, description, videoLength, tags, address) => {
         try {
 
             dapTubeData.methods.addVideo(
@@ -105,6 +108,7 @@ export default function Upload() {
                 title,
                 description,
                 videoLength,
+                tags
             ).send({ from: address }).on('transactionHash', hash => {
 
                 setIsLoading(false)
@@ -119,6 +123,12 @@ export default function Upload() {
     }
 
     const uploadToIpfs = async () => {
+
+        const formattedTags = []
+
+        tags.split(',').forEach(tag => {
+            formattedTags.push(CAPITALIZE_STRING(tag))
+        })
 
         if (!videoBuffer) {
             alert('Choose a video')
@@ -142,15 +152,15 @@ export default function Upload() {
             return
         }
 
-        saveToBlockchain(videoPath, thumbnailPath, dapTubeData, title, description, videoLength, address)
+        saveToBlockchain(videoPath, thumbnailPath, dapTubeData, title, description, videoLength, formattedTags.join(','), address)
         setIsLoading(false)
     }
 
     if (!isLoading) return (
         <div>
             <Header />
-            <BackHeader title='Upload your video' />
             <div style={{ padding: '20px', paddingTop: '0' }} className='flex-center'>
+                <BackHeader title='Upload your video' />
                 <div>
                     <div className="flex-between-top">
                         <div className="color-container">
@@ -170,6 +180,13 @@ export default function Upload() {
                                 <div><b>Wallet address</b></div>
                                 <p className='grey-text'>This is the wallet address where you will receive funds from your viewers.</p><br />
                                 <div type="text" className='text-input-2' ><p className='grey-text'>{address}</p></div>
+                            </div>
+                            <div className="space-40"></div>
+
+                            <div className='input-wrapper'>
+                                <div><b>Video tags</b></div>
+                                <p className='grey-text'>Seaparate tags with a comma (,) with no spaces between</p><br />
+                                <input type="text" className='text-input-2' onChange={(e) => { setTags(e.target.value) }} placeholder='eg Nature, Space, Technology' />
                             </div>
                         </div>
 
