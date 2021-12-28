@@ -25,17 +25,22 @@ export default function Home() {
     }, [])
 
     return (
-        <main>
+        <div>
             <Header />
-            <TagsHeader />
 
-            <div className="posts-container">
-                {
-                    videos.map((video, index) => {
-                        return <PosterCard key={index} tags={video.tags} thumbnail={video.thumbnail} videoLength={video.videoLength} description={video.description} owner={video.owner} title={video.title} id={video.id} src={video.src} />
-                    })
-                }
-            </div>
-        </main>
+            <main>
+                <div className='main-wrapper-1'>
+                    <TagsHeader />
+                    <h2>Today</h2>
+                    <div className="main-wrapper-2">
+                        {
+                            videos.map((video, index) => {
+                                return <PosterCard key={index} tags={video.tags} thumbnail={video.thumbnail} videoLength={video.videoLength} description={video.description} owner={video.owner} title={video.title} id={video.id} src={video.src} />
+                            })
+                        }
+                    </div>
+                </div>
+            </main>
+        </div>
     );
 }

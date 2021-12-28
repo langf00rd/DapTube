@@ -77,7 +77,8 @@ export default function Watch() {
                             </div>
                             <div className="space-20"></div>
                             <div style={{ maxWidth: '700px' }}>
-                                <small>{currentVideo.description}</small>
+                                <b>Published on 28 Dec 2021</b>
+                                <p>{currentVideo.description}</p>
                             </div>
                         </div>
                         <div className="space-20"></div>
@@ -89,10 +90,13 @@ export default function Watch() {
                                     }) : ''
                             }
                         </div>
+                        <div className="space-60"></div>
                     </div>
 
                     <div className="side-video-list">
-                        <b>Watch next</b>
+                        <b>Related videos</b>
+                        <br />
+                        <br />
                         {
                             videos.map((video, index) => {
                                 return <PosterCard key={index} tags={video.tags} thumbnail={video.thumbnail} videoLength={video.videoLength} description={video.description} owner={video.owner} title={video.title} id={video.id} src={video.src} />

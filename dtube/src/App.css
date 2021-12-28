@@ -5,8 +5,13 @@
 }
 
 body {
-  color: #fff;
-  background-color: #0e1217;
+  font-size: 0.9rem;
+  /* color: #fff; */
+  /* background-color: #0e1217; */
+}
+
+b {
+  font-weight: 600;
 }
 
 .back-header {
@@ -37,10 +42,10 @@ body {
 }
 
 .color-container {
-  background-color: #1d1f26;
+  background-color: #fafafa;
   padding: 20px;
   border-radius: 10px;
-  border: 2px solid #9999991c;
+  border: 1px solid #9999991c;
 }
 
 .tags-bar {
@@ -48,18 +53,18 @@ body {
   overflow-x: scroll;
   display: flex;
   align-items: center;
-  border-bottom: 2px solid #9999990f;
+  border-bottom: 1px solid #9999991c;
   margin-top: 70px;
-  padding: 20px;
+  padding: 10px 20px;
 }
 
 .tag-item {
   white-space: nowrap;
-  background: #1d1f26;
-  border: 2px solid #9999991c;
+  background: #fafafa;
+  border: 1px solid #9999991c;
   border-radius: 100px;
   width: min-content;
-  padding: 10px 20px;
+  padding: 8px 16px;
   cursor: pointer;
   transition: 0.2s linear;
   user-select: none;
@@ -81,11 +86,11 @@ header {
   justify-content: space-between;
   /* padding: 20px; */
   height: 70px;
-  background: #1d1f26e8;
+  background: #fafafaeb;
   z-index: 10;
   -webkit-backdrop-filter: blur(30px);
   backdrop-filter: blur(26px);
-  border-bottom: 2px solid #9999990f;
+  border-bottom: 1px solid #9999990f;
 }
 
 .header-wrapper {
@@ -95,11 +100,11 @@ header {
 }
 
 .avatar {
-  /* border: 2px solid #9999991c; */
+  /* border: 1px solid #9999991c; */
   /* background: #0F1218; */
   border-radius: 100px;
-  width: 70px;
-  height: 70px;
+  width: 60px;
+  height: 60px;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -115,7 +120,7 @@ header {
 }
 
 .icon-btn {
-  background: #0f1218;
+  /* background: #0f1218; */
   border-radius: 100px;
   width: 40px;
   height: 40px;
@@ -123,8 +128,8 @@ header {
   align-items: center;
   justify-content: center;
   cursor: pointer;
-  border: 2px solid #9999991c;
-  color: #fff;
+  /* border: 1px solid #9999991c; */
+  /* color: #fff; */
 }
 
 .icon-btn svg {
@@ -138,14 +143,14 @@ header {
 .search-box {
   width: 60%;
   height: 30px;
-  padding: 6px 21px;
+  padding: 4px 12px;
   border: none;
   border-radius: 10px;
-  background: #0f1218;
-  font-size: 16px;
+  background: #fff;
+  /* font-size: 16px; */
   outline: none;
-  color: #fff;
-  border: 2px solid #9999991c;
+  /* color: #fff; */
+  border: 1px solid #e3e3e3;
 }
 
 .space-5 {
@@ -178,27 +183,47 @@ header {
   height: 60px;
 }
 
-.posts-container {
-  display: flex;
-  align-items: center;
-  justify-content: start;
-  flex-wrap: wrap;
+main {
   margin-top: -20px;
-  padding: 20px;
+  /* padding: 20px; */
+  /* background: red; */
+}
+
+.main-wrapper-1 {
+  display: flex;
+  align-items: flex-start;
+  justify-content: start;
+  width: 80%;
+  margin: auto;
+  padding: 20px 0;
+  flex-direction: column;
+}
+
+.main-wrapper-2 {
+  display: flex;
+  align-items: flex-start;
+  flex-wrap: wrap;
 }
 
 .poster-item {
   position: relative;
-  width: 300px;
+  width: 280px;
   overflow: hidden;
-  margin: 30px 8px;
-  background: #1d1f26;
-  border: 2px solid #242424;
+  margin: 20px 8px;
+  margin-top: 0;
+  cursor: pointer;
+  /* background: #FAFAFA; */
+  /* border: 1px solid #242424; */
+}
+
+.poster-item:hover .poster-img {
+  /* filter: brightness(0.8); */
+  transform: scale(1.2);
 }
 
 .poster-text {
   width: 100%;
-  padding: 0 10px 10px 10px;
+  /* padding: 0 10px 10px 10px; */
 }
 
 .poster-title {
@@ -211,10 +236,10 @@ header {
   position: absolute;
   top: 5px;
   right: 10px;
-  background: #111010a8;
+  background: #000000ab;
   padding: 3px 7px;
-  border-radius: 100px;
-  font-size: 12px;
+  border-radius: 4px;
+  color: #fff;
 }
 
 .poster-address {
@@ -226,18 +251,22 @@ header {
   color: grey;
 }
 
-.poster-img {
-  background-color: #111010;
+.poster-img-wrapper {
+  background-color: #fafafa;
   width: 100%;
   height: 150px;
-  object-fit: cover;
-  cursor: pointer;
+  overflow: hidden;
+  /* cursor: pointer; */
   transition: 0.3s linear;
+  border-radius: 4px;
   /* filter: brightness(0.8); */
 }
 
-.poster-img:hover {
-  filter: brightness(0.5);
+.poster-img {
+  transition: 0.2s linear;
+  object-fit: cover;
+  width: 100%;
+  height: 100%;
 }
 
 .container,
@@ -278,9 +307,9 @@ main {
 
 .text-input {
   padding: 10px;
-  border: 2px solid #000;
+  border: 1px solid #000;
   border-radius: 10px;
-  font-size: 1rem;
+  /* font-size: 1rem; */
 }
 
 .empty-state-img {
@@ -315,21 +344,21 @@ main {
 }
 
 .playing-video-element {
-  background: #111010;
+  background: #fafafa;
   /* object-fit: cover; */
   height: 80%;
   width: 100%;
 }
 
 .playing-video-tag-item {
-  background: #111010;
+  background: #fafafa;
   margin-right: 10px;
   padding: 7px;
-  color: #fff;
-  border: 2px solid;
-  border-color: #1d1f26;
-  font-size: 14px;
-  color: #ebebeb8f;
+  /* color: #fff; */
+  border: 1px solid;
+  border-color: #fafafa;
+  /* font-size: 14px; */
+  /* color: #ebebeb8f; */
   cursor: pointer;
   border-radius: 10px;
   transition: 0.2s linear;
@@ -341,29 +370,29 @@ main {
 }
 
 .side-video-list {
-  /* background-color: #1d1f26; */
+  /* background-color: #FAFAFA; */
   flex: 1;
   /* padding: 15px; */
   /* padding-top: 0; */
   /* margin-top: -20px; */
-  /* border: 2px solid #242424; */
+  /* border: 1px solid #242424; */
   margin-left: 30px;
 }
 
 .text-input-2 {
-  background: #0f1218;
-  border: 2px solid;
-  border-color: #242424;
+  background: #fff;
+  border: 1px solid #9999991c;
   padding: 16px;
   border-radius: 10px;
   width: calc(90% + 15px);
   outline: none;
-  font-size: 1rem;
-  color: #fff;
+  /* font-size: 1rem; */
+  /* color: #fff; */
 }
 
 .file-selector {
-  background: #0f1218;
+  background: #fff;
+  border: 1px solid #9999991c;
   padding: 24px;
   cursor: pointer;
   border-radius: 10px;
@@ -375,7 +404,7 @@ textarea {
 }
 
 .grey-text {
-  color: grey;
+  color: rgba(20, 20, 20, 0.6);
 }
 
 .text-lg {
@@ -406,6 +435,14 @@ textarea {
   margin-right: 10px;
   width: 20px;
   height: 20px;
+  transition: 0.2s linear;
+}
+
+.btn-filled:hover svg,
+.btn:hover svg,
+.fade-btn:hover svg {
+  fill: #006aee;
+  /* display: none; */
 }
 
 .btn-filled {
@@ -420,7 +457,7 @@ textarea {
   color: #fff;
   border-radius: 100px;
   user-select: none;
-  border: 2px solid;
+  border: 1px solid;
   border-color: #006aee;
   cursor: pointer;
   transition: 0.3s linear;
@@ -438,7 +475,7 @@ textarea {
   text-decoration: none;
   padding: 20px;
   border-radius: 10px;
-  border: 2px solid;
+  border: 1px solid;
   border-color: #fff;
   user-select: none;
   outline: none;
@@ -456,7 +493,7 @@ textarea {
 }
 
 .footer {
-  /* border-top: 2px solid #f1f1f1; */
+  /* border-top: 1px solid #FAFAFA; */
   /* background-color: #fff; */
   position: fixed;
   bottom: 0;
