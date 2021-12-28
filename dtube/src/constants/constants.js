@@ -58,6 +58,60 @@ const GET_ROUTE_ID = () => {
     return routeId
 }
 
+const GET_VIDEO_FROM_ID = async (id) => {
+
+    let videos = await GET_VIDEOS()
+
+    for (let i = 0; i < videos.length; i++) {
+        const element = videos[i]
+
+        if (element.id === id) return element
+    }
+
+    return null
+}
+
+const UPLOAD__VIDEO_TO_IPFS = async (file) => {
+
+    if (!file) return [false, 'Please choose a video', null]
+
+    try {
+
+        const uploadedFilePath = await (IPFS.add(file)).path
+
+        return [true, 'video uploaded to ipfs', uploadedFilePath]
+
+    } catch (error) {
+        return [false, 'An error occured uploading video', null]
+    }
+}
+
+const SAVE_TO_BLOCKCHAIN = async (
+    videoHash,
+    dapTubeData,
+    title,
+    description,
+    videoLength,
+    address) => {
+
+    try {
+
+        await dapTubeData.methods.addVideo(
+            `https://ipfs.infura.io/ipfs/${videoHash}`,
+            title,
+            description,
+            videoLength,
+        ).send({ from: address }).on('transactionHash', hash => {
+
+            return [true, 'Video uploaded!🎉']
+        })
+
+    } catch (error) {
+
+        return [false, 'Sorry.Could not complete upload.Check your network connection']
+    }
+}
+
 const GET_VIDEOS = async () => {
 
     const [isConnected, payload] = await GET_BLOCKCHAIN_DATA()
@@ -86,19 +140,6 @@ const GET_VIDEOS = async () => {
     // }
 
 
-}
-
-const GET_VIDEO_FROM_ID = async (id) => {
-
-    let videos = await GET_VIDEOS()
-
-    for (let i = 0; i < videos.length; i++) {
-        const element = videos[i]
-
-        if (element.id === id) return element
-    }
-
-    return null
 }
 
 
@@ -138,4 +179,4 @@ const GET_VIDEO_FROM_ID = async (id) => {
 //     }
 // }
 
-export { GET_BLOCKCHAIN_DATA, GET_ROUTE_ID, GET_VIDEOS, GET_VIDEO_FROM_ID, IPFS, GET_ACCOUNTS }
+export { GET_BLOCKCHAIN_DATA, GET_ROUTE_ID, GET_VIDEOS, GET_VIDEO_FROM_ID, UPLOAD__VIDEO_TO_IPFS, SAVE_TO_BLOCKCHAIN, IPFS, GET_ACCOUNTS }

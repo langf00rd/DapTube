@@ -23,6 +23,14 @@ body {
   color: grey;
 }
 
+/* .cc {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  width: 10%;
+  background-color: red;
+} */
+
 .under-header {
   margin-top: 70px;
   padding: 20px;
@@ -97,7 +105,12 @@ header {
   justify-content: center;
 }
 
-.avatar svg {
+.avatar-sm {
+  width: 33px;
+  height: 33px;
+  /* background-color: #ffd200; */
+  /* padding: 0; */
+  object-fit: cover;
   /* width: 80px; */
 }
 
@@ -143,6 +156,11 @@ header {
 .space-10 {
   width: 10px;
   height: 10px;
+}
+
+.space-15 {
+  width: 15px;
+  height: 15px;
 }
 
 .space-20 {
@@ -237,6 +255,11 @@ main {
 .flex {
   display: flex;
   align-items: center;
+}
+
+.flex-top {
+  display: flex;
+  align-items: flex-start;
 }
 
 .flex-center {

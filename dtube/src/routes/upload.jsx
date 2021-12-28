@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import BackHeader from "../components/BackHeader";
 import Header from "../components/Header";
-import { GET_BLOCKCHAIN_DATA, IPFS } from '../constants/constants';
+import { GET_BLOCKCHAIN_DATA, SAVE_TO_BLOCKCHAIN, UPLOAD__VIDEO_TO_IPFS, IPFS } from '../constants/constants';
 
 export default function Upload() {
 
@@ -9,7 +9,8 @@ export default function Upload() {
     const [dapTubeData, setDapTubeData] = useState()
     const [title, setTitle] = useState()
     const [description, setDescription] = useState()
-    const [file, setFile] = useState()
+    const [videoBuffer, setVideoBuffer] = useState()
+    const [thumbnailBuffer, setThumbnailBuffer] = useState()
     const [videoLength, setVideoLength] = useState('00:00:00')
     const [address, setAddress] = useState(sessionStorage.getItem('address'))
 
@@ -49,53 +50,83 @@ export default function Upload() {
         video.src = URL.createObjectURL(file);
     }
 
-    const convertFileToBuffer = async (e) => {
+    const convertFileToBuffer = async (e, isVideo) => {
 
         const _file = e.target.files[0]
         const reader = new FileReader()
 
-        await getVideoMetadata(_file)
+        if (isVideo) await getVideoMetadata(_file)
 
         reader.readAsArrayBuffer(_file)
 
         reader.onloadend = async () => {
+            if (isVideo) setVideoBuffer(Buffer(reader.result))
+            if (!isVideo) setThumbnailBuffer(Buffer(reader.result))
+
             console.log(Buffer(reader.result))
-            setFile(Buffer(reader.result))
         }
     }
 
-    const saveToBlockchain = (fileHash) => {
-        console.log(`https://ipfs.infura.io/ipfs/${fileHash}`, title, address)
-
-        dapTubeData.methods.addVideo(
-            `https://ipfs.infura.io/ipfs/${fileHash}`,
-            title,
-            description,
-            videoLength,
-        ).send({ from: address }).on('transactionHash', hash => {
-            setIsLoading(false)
-            alert('video uploaded!🎉')
-        })
+    const convertVideoToBuffer = (e) => {
+        convertFileToBuffer(e, true)
     }
 
-    const uploadToIpfs = async (e) => {
-        if (!file) {
-            alert('choose a file')
+    const convertThumbnailToBuffer = (e) => {
+        convertFileToBuffer(e, false)
+    }
+
+    const saveToBlockchain = async (uploadedVideoPath) => {
+        try {
+
+            const [status, message] = await SAVE_TO_BLOCKCHAIN(uploadedVideoPath, dapTubeData, title, description, videoLength, address)
+
+            if (!status) {
+
+                setIsLoading(false)
+                alert(message)
+                return
+            }
+
+            alert(message)
+
+        } catch (error) {
+
+            alert(error)
+            console.log(error)
+        }
+    }
+
+    const uploadToIpfs = async () => {
+
+        if (!videoBuffer) {
+            alert('Choose a video')
+            return
+        }
+
+        if (!thumbnailBuffer) {
+            alert('Choose a thumbnail')
             return
         }
 
         try {
-
             setIsLoading(true)
-            const uploadedFile = await IPFS.add(file)
-            saveToBlockchain(uploadedFile.path)
+
+            const [status, message, uploadedVideoPath] = await UPLOAD__VIDEO_TO_IPFS(videoBuffer)
+
+            if (!status) {
+                setIsLoading(false)
+                alert(message)
+                return
+            }
+
+            saveToBlockchain(uploadedVideoPath)
 
         } catch (error) {
-            setIsLoading(false)
-            console.log(error)
-        }
 
-        console.log('done!')
+            setIsLoading(false)
+            alert('Could not upload your video')
+            console.log(error.message)
+        }
     }
 
     if (!isLoading) return (
@@ -129,11 +160,19 @@ export default function Upload() {
 
                         <div className="color-container">
                             <p>{videoLength}</p>
+
                             <div className='input-wrapper'>
                                 <div><b>Choose video</b></div><br />
-                                <input type='file' className='file-selector' onChange={async (e) => convertFileToBuffer(e)} accept='video/*' />
+                                <input type='file' className='file-selector' onChange={(e) => convertVideoToBuffer(e)} accept='video/*' />
                             </div>
                             <div className="space-20"></div>
+
+                            <div className='input-wrapper'>
+                                <div><b>Choose thumbnail</b></div><br />
+                                <input type='file' className='file-selector' onChange={(e) => convertThumbnailToBuffer(e)} accept='image/*' />
+                            </div>
+                            <div className="space-20"></div>
+
                             <div className="btn-filled" onClick={uploadToIpfs}>Start upload</div>
                         </div>
                     </div>
