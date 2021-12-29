@@ -99,7 +99,7 @@ export default function Upload() {
         return [true, path]
     }
 
-    const saveToBlockchain = (videoPath, thumbnailPath, dapTubeData, title, description, videoLength, tags, address) => {
+    const saveToBlockchain = (videoPath, thumbnailPath, dapTubeData, title, description, videoLength, tags, timestamp, address) => {
         try {
 
             dapTubeData.methods.addVideo(
@@ -107,8 +107,9 @@ export default function Upload() {
                 `https://ipfs.infura.io/ipfs/${thumbnailPath}`,
                 title,
                 description,
-                videoLength,
-                tags
+                // videoLength,
+                tags,
+                timestamp
             ).send({ from: address }).on('transactionHash', hash => {
 
                 setIsLoading(false)
@@ -152,7 +153,7 @@ export default function Upload() {
             return
         }
 
-        saveToBlockchain(videoPath, thumbnailPath, dapTubeData, title, description, videoLength, formattedTags.join(','), address)
+        saveToBlockchain(videoPath, thumbnailPath, dapTubeData, title, description, videoLength, formattedTags.join(','), Date().substr(4, 17), address)
         setIsLoading(false)
     }
 
@@ -162,58 +163,58 @@ export default function Upload() {
 
 
             <main>
-                <div className='main-wrapper-1'>
+                <div className='main-width-constraint'>
                     <BackHeader title='Upload your video' />
-                    <div className="main-wrapper-2">
-                        <div className="flex-between-top">
-                            <div className="color-container">
-                                <div className='input-wrapper'>
-                                    <div><b>Video title</b></div><br />
-                                    <input type="text" className='text-input-2' onChange={(e) => { setTitle(e.target.value) }} placeholder='My cat video' />
-                                </div>
-                                <div className="space-40"></div>
 
-                                <div className='input-wrapper'>
-                                    <div><b>Description</b></div><br />
-                                    <textarea className='text-input-2' placeholder='My video is cool' onChange={(e) => { setDescription(e.target.value) }}></textarea>
-                                </div>
-                                <div className="space-40"></div>
-
-                                <div className='input-wrapper'>
-                                    <div><b>Wallet address</b></div>
-                                    <p className='grey-text'>This is the wallet address where you will receive funds from your viewers.</p><br />
-                                    <div type="text" className='text-input-2' ><p className='grey-text'>{address}</p></div>
-                                </div>
-                                <div className="space-40"></div>
-
-                                <div className='input-wrapper'>
-                                    <div><b>Video tags</b></div>
-                                    <p className='grey-text'>Seaparate tags with a comma (,) with no spaces between</p><br />
-                                    <input type="text" className='text-input-2' onChange={(e) => { setTags(e.target.value) }} placeholder='eg Nature, Space, Technology' />
-                                </div>
+                    <div className="flex-between-top">
+                        <div className="color-container">
+                            <div className='input-wrapper'>
+                                <div><b>Video title</b></div><br />
+                                <input type="text" className='text-input-2' onChange={(e) => { setTitle(e.target.value) }} placeholder='My cat video' />
                             </div>
+                            <div className="space-40"></div>
 
-                            <div className="space-20"></div>
+                            <div className='input-wrapper'>
+                                <div><b>Description</b></div><br />
+                                <textarea className='text-input-2' placeholder='My video is cool' onChange={(e) => { setDescription(e.target.value) }}></textarea>
+                            </div>
+                            <div className="space-40"></div>
 
-                            <div className="color-container">
-                                <p>{videoLength}</p>
+                            <div className='input-wrapper'>
+                                <div><b>Wallet address</b></div>
+                                <p className='grey-text'>This is the wallet address where you will receive funds from your viewers.</p><br />
+                                <div type="text" className='text-input-2' ><p className='grey-text'>{address}</p></div>
+                            </div>
+                            <div className="space-40"></div>
 
-                                <div className='input-wrapper'>
-                                    <div><b>Choose video</b></div><br />
-                                    <input type='file' className='file-selector' onChange={(e) => convertFileToBuffer(e, true)} accept='video/*' />
-                                </div>
-                                <div className="space-20"></div>
-
-                                <div className='input-wrapper'>
-                                    <div><b>Choose thumbnail</b></div><br />
-                                    <input type='file' className='file-selector' onChange={(e) => convertFileToBuffer(e, false)} accept='image/*' />
-                                </div>
-                                <div className="space-20"></div>
-
-                                <div className="btn-filled" onClick={uploadToIpfs}>Start upload</div>
+                            <div className='input-wrapper'>
+                                <div><b>Video tags</b></div>
+                                <p className='grey-text'>Seaparate tags with a comma (,) with no spaces between</p><br />
+                                <input type="text" className='text-input-2' onChange={(e) => { setTags(e.target.value) }} placeholder='eg Nature, Space, Technology' />
                             </div>
                         </div>
+
+                        <div className="space-20"></div>
+
+                        <div className="color-container">
+                            <p>{videoLength}</p>
+
+                            <div className='input-wrapper'>
+                                <div><b>Choose video</b></div><br />
+                                <input type='file' className='file-selector' onChange={(e) => convertFileToBuffer(e, true)} accept='video/*' />
+                            </div>
+                            <div className="space-20"></div>
+
+                            <div className='input-wrapper'>
+                                <div><b>Choose thumbnail</b></div><br />
+                                <input type='file' className='file-selector' onChange={(e) => convertFileToBuffer(e, false)} accept='image/*' />
+                            </div>
+                            <div className="space-20"></div>
+
+                            <div className="btn-filled" onClick={uploadToIpfs}>Start upload</div>
+                        </div>
                     </div>
+                    <div className="space-60"></div>
                 </div>
             </main>
         </div>

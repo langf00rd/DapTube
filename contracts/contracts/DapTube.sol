@@ -14,14 +14,14 @@ contract DapTube {
         string thumbnail;
         string title;
         string description;
-        string videoLength;
         string tags;
+        string timestamp;
         address owner;
     }
 
-    function addVideo(string memory _src, string memory _thumbnail, string memory _title, string memory _description, string memory _videoLength, string memory _tags) public {
+    function addVideo(string memory _src, string memory _thumbnail, string memory _title, string memory _description, string memory _tags, string memory _timestamp) public {
         videoCount++;
 
-        videos[videoCount] = Video(videoCount, _src, _thumbnail, _title, _description, _videoLength, _tags, msg.sender);
+        videos[videoCount] = Video(videoCount, _src, _thumbnail, _title, _description, _tags, _timestamp, msg.sender);
     }
 }

@@ -5,8 +5,10 @@ import { create } from 'ipfs-http-client'
 const IPFS = create({ host: 'ipfs.infura.io', port: 5001, protocol: 'https' })
 
 const VIDEO_TAGS = [
+    'All',
     'Music',
     'Space',
+    'Mystery',
     'Movies',
     'Programming',
     'Sales',
@@ -14,7 +16,11 @@ const VIDEO_TAGS = [
     'Psychology',
     'Science',
     'Gaming',
-    'Novels'
+    'Funny',
+    'Worldwide',
+    'Novels',
+    'Cryptocurrency',
+    'Blockchain'
 ]
 
 const CONNECT_TO_WEB3 = async () => {
@@ -150,6 +156,27 @@ const GET_VIDEOS = async () => {
 
 }
 
+const GET_SIMILAR_VIDEOS = async () => {
+
+    const [isConnected, payload] = await GET_BLOCKCHAIN_DATA()
+
+    if (!isConnected) return []
+
+    const videoCount = await payload.methods.videoCount().call()
+    const videosArray = []
+
+    for (let i = videoCount; i >= 1; i--) {
+        const video = await payload.methods.videos(i).call()
+
+        if (video.id != GET_ROUTE_PARAM()) videosArray.push(video)
+    }
+
+    sessionStorage.setItem('videos', JSON.stringify(videosArray))
+
+    return videosArray
+
+}
+
 
 
 // const GET_VIDEO_METADATA = (file) => {
@@ -210,4 +237,4 @@ const GET_VIDEOS = async () => {
 //     }
 // }
 
-export { GET_BLOCKCHAIN_DATA, GET_ROUTE_PARAM, VIDEO_TAGS, GET_VIDEOS, GET_VIDEOS_BY_TAG, CAPITALIZE_STRING, GET_VIDEO_BY_ID, UPLOAD_TO_IPFS, IPFS, GET_ACCOUNTS }
+export { GET_BLOCKCHAIN_DATA, GET_ROUTE_PARAM, VIDEO_TAGS, GET_VIDEOS, GET_VIDEOS_BY_TAG, GET_SIMILAR_VIDEOS, CAPITALIZE_STRING, GET_VIDEO_BY_ID, UPLOAD_TO_IPFS, IPFS, GET_ACCOUNTS }

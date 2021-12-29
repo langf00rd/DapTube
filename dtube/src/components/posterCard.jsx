@@ -21,7 +21,7 @@ const PosterCard = (props) => {
     }, [])
 
     return (
-        <div className="poster-item" onClick={navigateToWatchScreen}>
+        <div className="poster-item" onClick={navigateToWatchScreen} style={{ width: props.isFullWidth ? '100%' : null }}>
             <div className='poster-img-wrapper'><img src={props.thumbnail} className='poster-img' alt={props.title} /></div>
 
             <div className="poster-text">
