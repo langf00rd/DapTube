@@ -81,7 +81,7 @@ export default function Watch() {
     if (videoExist) return (
         <div>
             <Header />
-            <TagsHeader />
+            {/* <TagsHeader /> */}
 
             <Modal
                 isOpen={modalIsOpen}
@@ -105,7 +105,7 @@ export default function Watch() {
                 <div className="btn-filled" onClick={sponsorCreator}>Send 🚀</div>
             </Modal>
 
-            <div className=''>
+            <div className='under-header'>
                 <div className="playing-video-container flex-between-top">
                     <div style={{ width: '100%', flex: 3 }}>
                         <video autoPlay={true} controls src={currentVideo.src} className='playing-video-element'>
@@ -142,7 +142,7 @@ export default function Watch() {
                         </div>
 
 
-                        <div className="flex">
+                        <div className="flex-wrap">
                             {
                                 currentVideo.tags
                                     ? currentVideo.tags.split(',').map((tag, index) => {

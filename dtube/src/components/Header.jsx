@@ -6,10 +6,34 @@ const Header = () => {
     const [showSearchPanel, setShowSearchPanel] = useState(false)
     const [query, setQuery] = useState()
 
+    const restrictedRoutes = [
+        '/upload'
+    ]
+
     const cancelSearch = () => {
         setQuery('')
         setShowSearchPanel(false)
     }
+
+    document.addEventListener("keydown", (e) => {
+        const searchBoxEl = document.querySelector('.search-box-el')
+
+        if (!restrictedRoutes.includes(window.location.pathname)) {
+
+            if (e.key === '/') {
+                setShowSearchPanel(true)
+                searchBoxEl.focus();
+                setQuery()
+            }
+        }
+
+        if (e.key === 'Escape') {
+            setShowSearchPanel(false)
+            searchBoxEl.blur();
+        }
+
+    });
+
 
     return (
         <div>
@@ -20,13 +44,15 @@ const Header = () => {
                     </Link>
 
                     <div className="search-box">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-search"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+                        <svg className={showSearchPanel ? 'active-search-box' : ''} xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-search"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
 
-                        <input value={query} onChange={e => setQuery(e.target.value)} onClick={() => setShowSearchPanel(true)} type="search" placeholder='Search for video' />
+                        <input value={query} className='search-box-el' onChange={e => setQuery(e.target.value)} onClick={() => setShowSearchPanel(true)} type="search" placeholder='Search for video. Press / to focus' />
 
                         {
                             showSearchPanel ?
-                                <b className='cancel-btn' onClick={cancelSearch}>Cancel</b>
+                                <small className='cancel-btn' onClick={cancelSearch}>
+                                    <b>Cancel</b>
+                                </small>
                                 : null
                         }
                     </div>
@@ -45,11 +71,11 @@ const Header = () => {
             {
                 showSearchPanel ?
                     <div className="search-container-wrapper">
-                        <div className="search-container"></div>
-                    </div>
+                        <div div className="search-container" ></div>
+                    </div >
                     : null
             }
-        </div>
+        </div >
     );
 }
 

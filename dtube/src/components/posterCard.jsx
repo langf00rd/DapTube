@@ -25,15 +25,15 @@ const PosterCard = (props) => {
             <div className='poster-img-wrapper'><img src={props.thumbnail} className='poster-img' alt={props.title} /></div>
 
             <div className="poster-text">
-                <div className="space-5"></div>
+                <div className="space-10"></div>
                 <div><small className='post-time'>{props.videoLength ? props.videoLength : '00:--'}</small></div>
                 <div className="flex-top">
                     <div> <div className="avatar avatar-sm" dangerouslySetInnerHTML={{ __html: avatar }} ></div></div>
                     <div className="space-5"></div>
                     <div>
-                        <b><small>{props.title}</small></b>
-                        <div><small className='grey-text'>Space boy</small></div>
-                        <div><b><small className='grey-text'>2d ago</small></b></div>
+                        <div className="poster-title">{props.title}</div>
+                        <div><small className='grey-text poster-name'>Space boy</small></div>
+                        <div><small className='grey-text'>2d ago</small></div>
                     </div>
                 </div>
                 {/* <div className="space-10"></div>
