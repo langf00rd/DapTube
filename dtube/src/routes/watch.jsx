@@ -1,31 +1,13 @@
 import React, { useEffect, useState } from "react";
-import { GET_ROUTE_PARAM, GET_SIMILAR_VIDEOS, GET_VIDEO_BY_ID } from "../constants/constants";
+import { GET_ROUTE_PARAM, GET_SIMILAR_VIDEOS, GET_VIDEO_BY_ID, MODAL_STYLE } from "../constants/constants";
 import Header from "../components/Header";
-import PosterCard from "../components/posterCard";
+import SidePosterCard from "../components/SidePosterCard";
 import { useLocation, useNavigate } from 'react-router-dom';
 import EmptyState from '../assets/e.png'
 import { createAvatar } from '@dicebear/avatars';
 import * as style from '@dicebear/adventurer';
-// import ReactDOM from 'react-dom';
 import Modal from 'react-modal';
 import TagsHeader from "../components/TagsHeader";
-
-
-const sponsorModalStyle = {
-    content: {
-        top: '50%',
-        left: '50%',
-        right: 'auto',
-        bottom: 'auto',
-        marginRight: '-50%',
-        transform: 'translate(-50%, -50%)',
-        padding: '20px 30px',
-        borderRadius: '10px',
-        border: 'none'
-        // width: '50%'
-    },
-};
-
 
 export default function Watch() {
     const location = useLocation();
@@ -86,7 +68,7 @@ export default function Watch() {
             <Modal
                 isOpen={modalIsOpen}
                 onRequestClose={closeModal}
-                style={sponsorModalStyle}
+                style={MODAL_STYLE}
                 contentLabel="Example Modal" >
 
                 <h1>Sponsor this creator</h1>
@@ -113,7 +95,7 @@ export default function Watch() {
                         </video>
                     </div>
 
-                    <div className="playing-video-text">
+                    <div className="playing-video-text" style={{ height: '100vh', overflowY: 'scroll', paddingTop: 0, marginTop: '-10px' }}>
                         <h1 className='playing-video-title'>{currentVideo.title}</h1>
 
                         <div className="flex-between">
@@ -157,7 +139,7 @@ export default function Watch() {
                         <div>
                             {
                                 videos.map((video, index) => {
-                                    return <PosterCard key={index} tags={video.tags} isFullWidth={true} thumbnail={video.thumbnail} videoLength={video.videoLength} description={video.description} owner={video.owner} title={video.title} id={video.id} src={video.src} />
+                                    return <SidePosterCard key={index} tags={video.tags} isFullWidth={true} thumbnail={video.thumbnail} videoLength={video.videoLength} description={video.description} owner={video.owner} title={video.title} id={video.id} src={video.src} />
                                 })
                             }
                         </div>

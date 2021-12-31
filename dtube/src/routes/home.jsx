@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import { useNavigate } from "react-router-dom";
 import Header from '../components/Header';
-import PosterCard from '../components/posterCard';
+import PosterCard from '../components/PosterCard';
 import TagsHeader from '../components/TagsHeader';
 import { GET_VIDEOS } from "../constants/constants"
 

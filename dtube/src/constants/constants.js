@@ -177,6 +177,28 @@ const GET_SIMILAR_VIDEOS = async () => {
 
 }
 
+const MODAL_STYLE = {
+    content: {
+        top: '50%',
+        left: '50%',
+        right: 'auto',
+        bottom: 'auto',
+        marginRight: '-50%',
+        transform: 'translate(-50%, -50%)',
+        padding: '20px',
+        borderRadius: '20px',
+        border: 'none',
+        width: '40%',
+        textAlign: 'center',
+        maxWidth: '400px'
+    },
+};
+
+const FULL_WIDTH_MODAL_STYLE = {
+    // content: {
+    //     width: '100v'
+    // },
+};
 
 
 // const GET_VIDEO_METADATA = (file) => {
@@ -233,8 +255,8 @@ const GET_SIMILAR_VIDEOS = async () => {
 //     } catch (error) {
 
 //         console.log(error)
-//         return [false, 'Sorry.Could not complete upload.Check your network connection']
+//         return [false, 'Sorry.could not connect to web3 😔t complete upload.Check your network connection']
 //     }
 // }
 
-export { GET_BLOCKCHAIN_DATA, GET_ROUTE_PARAM, VIDEO_TAGS, GET_VIDEOS, GET_VIDEOS_BY_TAG, GET_SIMILAR_VIDEOS, CAPITALIZE_STRING, GET_VIDEO_BY_ID, UPLOAD_TO_IPFS, IPFS, GET_ACCOUNTS }
+export { GET_BLOCKCHAIN_DATA, GET_ROUTE_PARAM, VIDEO_TAGS, MODAL_STYLE, GET_VIDEOS, GET_VIDEOS_BY_TAG, GET_SIMILAR_VIDEOS, CAPITALIZE_STRING, GET_VIDEO_BY_ID, UPLOAD_TO_IPFS, IPFS, GET_ACCOUNTS }
