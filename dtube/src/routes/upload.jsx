@@ -108,16 +108,6 @@ export default function Upload() {
         }
     }
 
-    // const convertVideoToBuffer = (e) => {
-    //     // console.log(e)
-    //     convertFileToBuffer(e, true)
-    // }
-
-    // const convertThumbnailToBuffer = (e) => {
-    //     // console.log(e.target.files)
-    //     convertFileToBuffer(e, false)
-    // }
-
     const saveThumbnailToIpfs = async () => {
         console.log('saving thumbnail')
 
@@ -284,13 +274,13 @@ export default function Upload() {
 
                         <div className='input-wrapper'>
                             <div><b>Title (required)</b></div><br />
-                            <input type="text" className='text-input-2' onChange={(e) => { setTitle(e.target.value) }} placeholder='Add a title that describes your video' />
+                            <input type="text" className='text-input-2' onChange={(e) => { setTitle(CAPITALIZE_STRING(e.target.value.trim())) }} placeholder='Add a title that describes your video' />
                         </div>
                         <div className="space-40"></div>
 
                         <div className='input-wrapper'>
                             <div><b>Description</b></div><br />
-                            <textarea className='text-input-2' placeholder='Tell viewers about your video' onChange={(e) => { setDescription(e.target.value) }}></textarea>
+                            <textarea className='text-input-2' placeholder='Tell viewers about your video' onChange={(e) => { setDescription(e.target.value.trim()) }}></textarea>
                         </div>
                         <div className="space-40"></div>
 
@@ -298,7 +288,7 @@ export default function Upload() {
                         <div className='input-wrapper'>
                             <div><b>Video tags (required)</b></div>
                             <p className='grey-text'>Seaparate tags with a comma (,) with no spaces between</p><br />
-                            <input type="text" className='text-input-2' onChange={(e) => { setTags(e.target.value) }} placeholder='eg Nature, Space, Technology' />
+                            <input type="text" className='text-input-2' onChange={(e) => { setTags(e.target.value.trim()) }} placeholder='eg Nature, Space, Technology' />
                         </div>
                         <div className="space-40"></div>
 

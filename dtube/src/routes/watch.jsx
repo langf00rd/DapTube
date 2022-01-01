@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { GET_ROUTE_PARAM, GET_SIMILAR_VIDEOS, GET_VIDEO_BY_ID, MODAL_STYLE } from "../constants/constants";
 import Header from "../components/Header";
-import SidePosterCard from "../components/SidePosterCard";
+import PosterCard from "../components/PosterCard";
 import { useLocation, useNavigate } from 'react-router-dom';
 import EmptyState from '../assets/e.png'
 import { createAvatar } from '@dicebear/avatars';
@@ -29,6 +29,8 @@ export default function Watch() {
 
         const initPage = async () => {
 
+            let thisVideo;
+
             if (!await GET_VIDEO_BY_ID(GET_ROUTE_PARAM())) {
                 setVideoExist(false)
                 setCurrentVideo({})
@@ -36,11 +38,14 @@ export default function Watch() {
             }
 
             let svg = createAvatar(style, { seed: (Date.now() + Math.random() * 1000).toString() });
-
             setAvatar(svg)
-            setVideos(await GET_SIMILAR_VIDEOS())
+
+            thisVideo = await GET_VIDEO_BY_ID(GET_ROUTE_PARAM())
+
+            setCurrentVideo(thisVideo)
             setVideoExist(true)
-            setCurrentVideo(await GET_VIDEO_BY_ID(GET_ROUTE_PARAM()))
+
+            getSimilarVideos(thisVideo)
 
         }
 
@@ -48,6 +53,11 @@ export default function Watch() {
         return () => { }
 
     }, [location])
+
+    const getSimilarVideos = async (thisVideo) => {
+
+        setVideos(await GET_SIMILAR_VIDEOS(thisVideo.tags.split(',')))
+    }
 
     const viewTag = (tag) => { navigate(`/tag?${tag}`) }
 
@@ -63,7 +73,6 @@ export default function Watch() {
     if (videoExist) return (
         <div>
             <Header />
-            {/* <TagsHeader /> */}
 
             <Modal
                 isOpen={modalIsOpen}
@@ -136,10 +145,10 @@ export default function Watch() {
                         <div className="space-20"></div>
                         <h2>Watch next</h2>
                         <div className="space-10"></div>
-                        <div>
+                        <div style={{ paddingBottom: '100px' }}>
                             {
                                 videos.map((video, index) => {
-                                    return <SidePosterCard key={index} tags={video.tags} isFullWidth={true} thumbnail={video.thumbnail} videoLength={video.videoLength} description={video.description} owner={video.owner} title={video.title} id={video.id} src={video.src} />
+                                    return <PosterCard key={index} tags={video.tags} isFullWidth={true} thumbnail={video.thumbnail} videoLength={video.videoLength} description={video.description} owner={video.owner} title={video.title} id={video.id} src={video.src} />
                                 })
                             }
                         </div>

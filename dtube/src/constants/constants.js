@@ -23,6 +23,39 @@ const VIDEO_TAGS = [
     'Blockchain'
 ]
 
+const CHECK_PREFS = () => {
+
+    let prefs = localStorage.getItem('prefs')
+    let username = localStorage.getItem('username')
+
+    if (!prefs) localStorage.setItem('prefs', 'Memes')
+    if (!username) localStorage.setItem('username', '')
+
+
+}
+
+const MANAGE_PREFS = (tag, add) => {
+
+    const tags = (localStorage.getItem('prefs')).split(',')
+
+    if (add) {
+
+        tags.push(tag)
+        tags.toString()
+        localStorage.setItem('prefs', tags)
+        return
+    }
+
+    let newPrefs = tags.filter(function (item) {
+        return item !== tag
+    })
+
+    localStorage.setItem('prefs', newPrefs.toString())
+
+}
+
+const PREFS = localStorage.getItem('prefs')
+
 const CONNECT_TO_WEB3 = async () => {
 
     try {
@@ -156,7 +189,7 @@ const GET_VIDEOS = async () => {
 
 }
 
-const GET_SIMILAR_VIDEOS = async () => {
+const GET_VIDEOS_BY_TITLE = async (title) => {
 
     const [isConnected, payload] = await GET_BLOCKCHAIN_DATA()
 
@@ -166,12 +199,49 @@ const GET_SIMILAR_VIDEOS = async () => {
     const videosArray = []
 
     for (let i = videoCount; i >= 1; i--) {
+
         const video = await payload.methods.videos(i).call()
 
-        if (video.id != GET_ROUTE_PARAM()) videosArray.push(video)
+        if (video.title >= title && video.id != GET_ROUTE_PARAM()) videosArray.push(video)
     }
 
-    sessionStorage.setItem('videos', JSON.stringify(videosArray))
+    // const oldSearch = sessionStorage.getItem('search')
+    // sessionStorage.setItem('videos', JSON.stringify(videosArray))
+
+    return videosArray
+}
+
+
+function hasSimilarTags(array1, array2) {
+
+    for (let i = 0; i < array1.length; i++) {
+
+        for (let j = 0; j < array2.length; j++) {
+
+            if (array1[i] === array2[j]) return true;
+        }
+    }
+
+    return false;
+}
+
+const GET_SIMILAR_VIDEOS = async (tags) => {
+
+    const [isConnected, payload] = await GET_BLOCKCHAIN_DATA()
+
+    if (!isConnected) return []
+
+    const videoCount = await payload.methods.videoCount().call()
+    const videosArray = []
+
+    for (let i = videoCount; i >= 1; i--) {
+
+        const video = await payload.methods.videos(i).call()
+        const videoTags = video.tags.split(',')
+
+        if (hasSimilarTags(videoTags, tags) && video.id != GET_ROUTE_PARAM()) videosArray.push(video)
+
+    }
 
     return videosArray
 
@@ -259,4 +329,4 @@ const FULL_WIDTH_MODAL_STYLE = {
 //     }
 // }
 
-export { GET_BLOCKCHAIN_DATA, GET_ROUTE_PARAM, VIDEO_TAGS, MODAL_STYLE, GET_VIDEOS, GET_VIDEOS_BY_TAG, GET_SIMILAR_VIDEOS, CAPITALIZE_STRING, GET_VIDEO_BY_ID, UPLOAD_TO_IPFS, IPFS, GET_ACCOUNTS }
+export { GET_BLOCKCHAIN_DATA, GET_ROUTE_PARAM, CHECK_PREFS, MANAGE_PREFS, VIDEO_TAGS, GET_VIDEOS_BY_TITLE, MODAL_STYLE, GET_VIDEOS, GET_VIDEOS_BY_TAG, GET_SIMILAR_VIDEOS, CAPITALIZE_STRING, PREFS, GET_VIDEO_BY_ID, UPLOAD_TO_IPFS, IPFS, GET_ACCOUNTS }

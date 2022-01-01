@@ -2,17 +2,31 @@ import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import AvatarSvg from "../components/AvatarSvg";
 import Logo from '../assets/logo.png'
+import { CAPITALIZE_STRING, GET_VIDEOS_BY_TITLE } from "../constants/constants";
+import SidePosterCard from "./SidePosterCard";
 
 const Header = () => {
     const [showSearchPanel, setShowSearchPanel] = useState(false)
     const [query, setQuery] = useState()
+    const [videos, setVideos] = useState([])
 
     const restrictedRoutes = [
         '/upload'
     ]
 
+    const initSearch = async (val) => {
+
+        let query = val
+        setQuery(val)
+
+        setVideos(await GET_VIDEOS_BY_TITLE(val))
+
+        console.log(query)
+    }
+
     const cancelSearch = () => {
         setQuery('')
+        setVideos([])
         setShowSearchPanel(false)
     }
 
@@ -46,7 +60,7 @@ const Header = () => {
                     <div className={showSearchPanel ? 'active-search-box search-box' : 'search-box'}>
                         <svg className={showSearchPanel ? 'active-search-box-svg' : ''} xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-search"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
 
-                        <input value={query} className='search-box-el' onChange={e => setQuery(e.target.value)} onClick={() => setShowSearchPanel(true)} type="search" placeholder='Search for video. Press / to focus' />
+                        <input value={query} className='search-box-el' onChange={e => initSearch(CAPITALIZE_STRING(e.target.value))} onClick={() => setShowSearchPanel(true)} type="search" placeholder='Search for video. Press / to focus' />
 
                         {
                             showSearchPanel ?
@@ -71,7 +85,15 @@ const Header = () => {
             {
                 showSearchPanel ?
                     <div className="search-container-wrapper" onClick={cancelSearch}>
-                        <div div className="search-container" ></div>
+                        <div div className={query ? "search-container" : 'empty-search-container'} >
+                            <div>
+                                {
+                                    videos.map((video, index) => {
+                                        return <SidePosterCard key={index} tags={video.tags} isFullWidth={true} thumbnail={video.thumbnail} videoLength={video.videoLength} description={video.description} owner={video.owner} title={video.title} id={video.id} src={video.src} />
+                                    })
+                                }
+                            </div>
+                        </div>
                     </div >
                     : null
             }
