@@ -26,11 +26,11 @@ const SidePosterCard = (props) => {
                 <div>
                     <div className="poster-title">{props.title}</div>
                     <div className='flex'>
-                        <small className='grey-text'>Space boy</small>
+                        <small className='grey-text'>{props.name}</small>
                         <div className="space-5"></div>
                         •
                         <div className="space-5"></div>
-                        <small className='grey-text'>Space boy</small>
+                        <small className='grey-text'>{props.timestamp.substr(0, 11)}</small>
                     </div>
                 </div>
             </div>

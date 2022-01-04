@@ -89,7 +89,7 @@ const Header = () => {
                             <div>
                                 {
                                     videos.map((video, index) => {
-                                        return <SidePosterCard key={index} tags={video.tags} isFullWidth={true} thumbnail={video.thumbnail} videoLength={video.videoLength} description={video.description} owner={video.owner} title={video.title} id={video.id} src={video.src} />
+                                        return <SidePosterCard key={index} name={video.name} timestamp={video.timestamp}  tags={video.tags} isFullWidth={true} thumbnail={video.thumbnail} videoLength={video.videoLength} description={video.description} owner={video.owner} title={video.title} id={video.id} src={video.src} />
                                     })
                                 }
                             </div>

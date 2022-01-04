@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { CAPITALIZE_STRING, CHECK_PREFS, MANAGE_PREFS, PREFS, VIDEO_TAGS } from "../constants/constants";
+import { CAPITALIZE_STRING, CHECK_PREFS, GET_ACCOUNTS, GET_BLOCKCHAIN_DATA, MANAGE_PREFS, PREFS, VIDEO_TAGS } from "../constants/constants";
 
 const Welcome = () => {
     let navigate = useNavigate();
@@ -13,7 +13,7 @@ const Welcome = () => {
         return () => { }
     }, [])
 
-    const saveChanges = () => {
+    const saveChanges = async () => {
 
         let prefs = localStorage.getItem('prefs')
 
@@ -30,7 +30,7 @@ const Welcome = () => {
         }
 
         localStorage.setItem('username', name)
-        navigate('/home')
+        navigate('/')
     }
 
     return (
@@ -38,7 +38,8 @@ const Welcome = () => {
             <div className="center-width">
 
                 <div className='input-wrapper'>
-                    <h2>What should we call you?</h2><br />
+                    <h2>What should we call you?</h2>
+                    <p className='grey-text'>This doesn't have to be your real name</p><br />
                     <input type="text" value={name} onChange={(e) => { setName(e.target.value) }} className='text-input-2 input-border' placeholder='' />
                 </div>
                 <div className="space-40"></div>

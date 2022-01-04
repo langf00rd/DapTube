@@ -116,8 +116,9 @@ b {
 }
 
 .tag-item:hover {
-  background: transparent;
-  border-color: transparent;
+  color: #0069ee;
+  /* background: transparent;
+  border-color: transparent; */
 }
 
 .active-tag-item {
@@ -572,7 +573,8 @@ main {
   border: navajowhite;
   border-bottom: 2px solid #ededed;
   padding-bottom: 14px;
-  width: calc(90% + 15px);
+  width: 85%;
+  /* width: calc(90% + 15px); */
   outline: none;
 }
 
@@ -668,6 +670,10 @@ textarea {
   cursor: pointer;
 }
 
+.text-btn:hover {
+  opacity: 0.3;
+}
+
 .btn-filled svg,
 .btn svg,
 .fade-btn svg {
@@ -750,6 +756,12 @@ textarea {
   align-items: center;
   justify-content: center;
   /* font-weight: 600; */
+}
+
+@media screen and (max-width: 480px) {
+  main {
+    padding-top: 100px;
+  }
 }
 
 /* @media screen and (max-width: 480px) {

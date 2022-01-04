@@ -2,6 +2,7 @@ import React, { useState, useRef, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import BackHeader from "../components/BackHeader";
 import Header from "../components/Header";
+import { Link } from "react-router-dom";
 import Modal from 'react-modal';
 import { GET_BLOCKCHAIN_DATA, UPLOAD_TO_IPFS, CAPITALIZE_STRING, MODAL_STYLE } from '../constants/constants';
 
@@ -14,7 +15,9 @@ export default function Upload() {
     const [isVideoSelected, setIsVideoSelected] = useState(false);
     const [isThumbnailSelected, setIsThumbnailSelected] = useState(false);
 
-    const [address, setAddress] = useState(sessionStorage.getItem('address'))
+    const address = sessionStorage.getItem('address')
+    const [username, setUsername] = useState()
+
     const [videoLength, setVideoLength] = useState('00:00:00')
     const [description, setDescription] = useState('')
     const [isLoading, setIsLoading] = useState(false)
@@ -29,7 +32,24 @@ export default function Upload() {
 
 
     useEffect(() => {
+        // const checkIsFirstTime = () => {
+        //     let name = localStorage.getItem('username')
+        //     let prefs = localStorage.getItem('prefs')
+
+        //     if (!name || !prefs) {
+        //         alert('Enter your name before you can upload a video')
+        //         navigate('/edit')
+        //         return
+        //     }
+        // }
+        // checkIsFirstTime()
+
         const initUploadPage = async () => {
+
+            let name = localStorage.getItem('username')
+            if (name) setUsername(name)
+
+            // console.log('username', name)
 
             openModal()
 
@@ -50,7 +70,7 @@ export default function Upload() {
     const openModal = () => { setIsOpen(true); }
 
     const closeModal = () => {
-
+        // setIsOpen(false);
         if (thumbnailBuffer && videoBuffer) setIsOpen(false);
     }
 
@@ -62,26 +82,26 @@ export default function Upload() {
         thumbnailUploadRef.current.click();
     }
 
-    // const getVideoMetadata = async (file) => {
-    //     var format = require('format-duration')
-    //     var video = document.createElement('video');
+    const getVideoMetadata = async (file) => {
+        var format = require('format-duration')
+        var video = document.createElement('video');
 
-    //     video.preload = 'metadata';
-    //     video.onloadedmetadata = function () {
-    //         window.URL.revokeObjectURL(video.src);
+        video.preload = 'metadata';
+        video.onloadedmetadata = function () {
+            window.URL.revokeObjectURL(video.src);
 
-    //         if (video.duration < 1) {
-    //             alert('video too short. choose a new video')
-    //             return
-    //         }
+            if (video.duration < 1) {
+                alert('video too short. choose a new video')
+                return
+            }
 
-    //         let timeInMilliseconds = (video.duration).toFixed(0) * 1000
+            let timeInMilliseconds = (video.duration).toFixed(0) * 1000
 
-    //         setVideoLength(format(timeInMilliseconds))
-    //     }
+            setVideoLength(format(timeInMilliseconds))
+        }
 
-    //     video.src = URL.createObjectURL(file);
-    // }
+        video.src = URL.createObjectURL(file);
+    }
 
     const convertFileToBuffer = async (e, isVideo) => {
         const _file = e.target.files[0]
@@ -98,7 +118,7 @@ export default function Upload() {
 
             if (isVideo) setSelectedVideo(_file)
 
-            // if (isVideo) await getVideoMetadata(_file)
+            if (isVideo) await getVideoMetadata(_file)
 
             reader.readAsArrayBuffer(_file)
             reader.onloadend = async () => {
@@ -129,14 +149,17 @@ export default function Upload() {
     const saveToBlockchain = async (videoPath, thumbnailPath, dapTubeData, title, description, videoLength, tags, timestamp, address) => {
         try {
 
+            console.log('uploading to blockchain!')
+
             dapTubeData.methods.addVideo(
                 `https://ipfs.infura.io/ipfs/${videoPath}`,
                 `https://ipfs.infura.io/ipfs/${thumbnailPath}`,
                 title,
                 description,
-                // videoLength,
                 tags,
-                timestamp
+                username,
+                timestamp,
+                videoLength,
             ).send({ from: address }).on('transactionHash', hash => {
 
                 setIsLoading(false)
@@ -156,6 +179,11 @@ export default function Upload() {
 
         if (!videoBuffer) {
             alert('Choose a video')
+            return
+        }
+
+        if (!username) {
+            alert('Add a name')
             return
         }
 
@@ -190,6 +218,8 @@ export default function Upload() {
             alert('Could not upload either thumbnail or video')
             return
         }
+
+        console.log('media uploaded!')
 
         await saveToBlockchain(videoPath, thumbnailPath, dapTubeData, title, description, videoLength, formattedTags.join(','), Date().substr(4, 17), address)
         clearFields()
@@ -268,9 +298,12 @@ export default function Upload() {
                             <div className="btn-filled fade-filled" onClick={uploadToIpfs}>Start upload</div>
                         </div>
 
-                        <div className="text-btn" onClick={() => setIsOpen(true)}>Change video or thumbnail</div>
                         <div className="space-20"></div>
-                        <div className="space-20"></div>
+                        <div className="flex-between">
+                            <div className="text-btn" onClick={() => setIsOpen(true)}>Change video or thumbnail</div>
+                            <Link to='/edit' className="text-btn" onClick={() => setIsOpen(true)}>Edit your info</Link>
+                        </div>
+                        <div className="space-60"></div>
 
                         <div className='input-wrapper'>
                             <div><b>Title (required)</b></div><br />
@@ -293,10 +326,18 @@ export default function Upload() {
                         <div className="space-40"></div>
 
                         <div className='input-wrapper'>
+                            <div><b>Your name (required)</b></div>
+                            <p className='grey-text'>This doesn't have to be your real name</p><br />
+                            <input className='text-input-2' value={username} onChange={(e) => { setUsername(e.target.value.trim()) }} />
+                        </div>
+                        <div className="space-40"></div>
+
+                        <div className='input-wrapper'>
                             <div><b>Wallet address</b></div>
                             <p className='grey-text'>This is the wallet address where you will receive funds from your viewers.</p><br />
                             <div type="text" className='text-input-2' ><p className='grey-text'>{address}</p></div>
                         </div>
+                        <div className="space-40"></div>
                     </div>
 
                     <div className="space-60"></div>

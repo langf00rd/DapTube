@@ -1,5 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import { useNavigate } from "react-router-dom";
+import { getMethods } from 'simple-web3';
+import { CONTRACT_ABI } from '../abis/dapTube.abi';
 import Header from '../components/Header';
 import PosterCard from '../components/PosterCard';
 import TagsHeader from '../components/TagsHeader';
@@ -17,12 +19,16 @@ export default function Home() {
                 return
             }
 
-            setVideos(await GET_VIDEOS())
+            const methods = await getMethods(CONTRACT_ABI)
+            console.log('methods --->', await methods.videoCount().call())
+
+            // setVideos(await GET_VIDEOS())
         }
 
         initPage()
         return () => { }
     }, [])
+
 
     return (
         <div>
@@ -34,7 +40,7 @@ export default function Home() {
                     <div className="main-wrapper">
                         {
                             videos.map((video, index) => {
-                                return <PosterCard key={index} tags={video.tags} thumbnail={video.thumbnail} videoLength={video.videoLength} description={video.description} owner={video.owner} title={video.title} id={video.id} src={video.src} />
+                                return <PosterCard key={index} name={video.name} timestamp={video.timestamp} tags={video.tags} thumbnail={video.thumbnail} videoLength={video.videoLength} description={video.description} owner={video.owner} title={video.title} id={video.id} src={video.src} />
                             })
                         }
                     </div>

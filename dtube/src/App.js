@@ -4,37 +4,29 @@ import Modal from 'react-modal';
 import { useNavigate } from "react-router-dom";
 import Logo from './assets/logo.png'
 import { GET_BLOCKCHAIN_DATA, GET_ACCOUNTS, MODAL_STYLE, CHECK_PREFS } from './constants/constants';
-
+import { getAccount } from 'simple-web3'
+import { CONTRACT_ABI } from './abis/dapTube.abi'
 
 function App() {
   let navigate = useNavigate();
 
-  useEffect(() => {
+  const connectWallet = async () => {
+    let name = localStorage.getItem('username')
+    let prefs = localStorage.getItem('prefs')
 
-    const checkIsFirstTime = () => {
-      let username = localStorage.getItem('username')
-      let prefs = localStorage.getItem('prefs')
-
-      if (!username || !prefs) {
-
-        localStorage.setItem('prefs', 'Memes')
-        localStorage.setItem('username', '')
-
-        navigate('/welcome')
-      }
+    if (!name || !prefs) {
+      navigate('/edit')
+      return
     }
 
-    checkIsFirstTime()
-    return () => { }
-  }, [])
+    const account = await getAccount()
 
-  const connectWallet = async () => {
-    const [isConnected, payload] = await GET_BLOCKCHAIN_DATA()
+    if (!account.status) alert('Could not get account')
 
-    if (!isConnected) return
+    sessionStorage.setItem('address', account.payload)
 
-    sessionStorage.setItem('address', await GET_ACCOUNTS())
     navigate('/home')
+
   }
 
   return (
